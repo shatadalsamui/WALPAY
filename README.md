@@ -1,9 +1,35 @@
-# WALPAY Project
+# WalPay - Modern Wallet Payment Platform
 
-A modern payment solution built with:
-- Next.js frontend
-- Prisma ORM for database
-- Turborepo for monorepo management
+WalPay is a cutting-edge payment solution that enables seamless transactions between users and merchants through digital wallets. Built as a monorepo using Turborepo it combines the power of Next.js Prisma and modern web technologies to deliver a scalable and maintainable payment ecosystem.
+
+## Key Features
+- Instant wallet-to-wallet transactions
+- Merchant payment processing
+- Secure authentication with NextAuth
+- Real-time balance tracking
+- Modular architecture for easy extensibility
+
+## Technology Stack
+- **Frontend**: Next.js 14 with App Router
+- **Database**: PostgreSQL with Prisma ORM
+- **State Management**: Jotai atoms
+- **Authentication**: NextAuth.js
+- **Monorepo**: Turborepo for build optimization
+- **Styling**: Tailwind CSS
+
+## Architecture Highlights
+- **Monorepo Structure**: Shared code between web apps
+- **Type Safety**: End-to-end TypeScript
+- **API Layer**: Route handlers for backend logic
+- **UI Components**: Reusable component library
+- **Database Client**: Shared Prisma client across apps
+
+## Development Principles
+1. **Modularity**: Independent apps and packages
+2. **Type Safety**: Strict TypeScript enforcement
+3. **Performance**: Optimized builds with Turborepo
+4. **Security**: Secure authentication and data handling
+5. **Scalability**: Designed for growth
 
 ## Before Getting Started
 
@@ -95,10 +121,6 @@ NEXT_PUBLIC_API_URL="http://localhost:3000"
 2. Run migrations:
 ```bash
 npx prisma migrate dev
-```
-3. Seed initial data (optional):
-```bash
-npx prisma db seed
 ```
 
 ## Running the Project
