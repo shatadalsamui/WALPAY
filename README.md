@@ -6,7 +6,7 @@ packages/
   db/         - Database schema and Prisma configuration
 apps/
   user-app/   - Main application
-```
+``
 
 ## Prerequisites
 - Node.js v16+
