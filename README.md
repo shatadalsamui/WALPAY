@@ -1,20 +1,61 @@
-- Clone the repo
+# WALPAY Project
 
-```jsx
-git clone https://github.com/100xdevs-cohort-2/week-17-final-code
+## Project Structure
+```
+packages/
+  db/         - Database schema and Prisma configuration
+apps/
+  user-app/   - Main application
 ```
 
-- npm install
-- Run postgres either locally or on the cloud (neon.tech)
+## Prerequisites
+- Node.js v16+
+- PostgreSQL
+- Docker (optional)
 
-```jsx
-docker run  -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres
+## Setup Instructions
+
+1. **Clone repository**
+```bash
+git clone git@github.com:shatadalsamui/WALPAY.git
+cd WALPAY
 ```
 
-- Copy over all .env.example files to .env
-- Update .env files everywhere with the right db url
-- Go to `packages/db`
-    - npx prisma migrate dev
-    - npx prisma db seed
-- Go to `apps/user-app` , run `npm run dev`
-- Try logging in using phone - 1111111111 , password - alice (See `seed.ts`)
+2. **Install dependencies**
+```bash
+npm install
+```
+
+3. **Database Setup** (Choose one option)
+
+**Option A: Local PostgreSQL with Docker**
+```bash
+docker run -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres
+```
+
+**Option B: Cloud PostgreSQL (e.g., Neon.tech)**
+- Create account and database
+- Get connection string
+
+4. **Environment Configuration**
+```bash
+cp .env.example .env
+# Update .env with your database credentials
+```
+
+5. **Database Migrations**
+```bash
+cd packages/db
+npx prisma migrate dev
+npx prisma db seed
+```
+
+6. **Run Application**
+```bash
+cd apps/user-app
+npm run dev
+```
+
+## Development Scripts
+- `npm test` - Run tests
+- `npm run build` - Build production version
