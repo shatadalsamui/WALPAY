@@ -71,6 +71,36 @@ cd apps/user-app
 npm run dev
 ```
 
+## Bank API Payment Confirmation
+
+When receiving payment confirmation from the bank API, the payload will have the following structure:
+
+```json
+{
+    "token": "970.4572088875194",
+    "user_identifier": 1,
+    "amount": "210"
+}
+```
+
+This structure is used for both on-ramping transactions and payment confirmations.
+
+### Testing with Postman
+To test the payment confirmation webhook:
+1. Open Postman
+2. Create a new POST request to: `http://localhost:3003/hdfcWebhook`
+3. Set Headers:
+   - `Content-Type: application/json`
+4. Send the following raw JSON body:
+
+```json
+{
+    "token": "970.4572088875194",
+    "user_identifier": 1,
+    "amount": "210"
+}
+```
+
 ## Development Scripts
 - `npm test` - Run tests
 - `npm run build` - Build production version
