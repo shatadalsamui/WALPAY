@@ -1,8 +1,10 @@
+"use server"
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client"
 
-export async function createOnRampTransaction(amount: string, provider: string) {
+export async function createOnRampTransaction(amount: number, provider: string) {
 
     const session = await getServerSession(authOptions);
 
