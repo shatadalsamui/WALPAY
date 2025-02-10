@@ -91,7 +91,7 @@ To test the payment confirmation webhook:
 2. Create a new POST request to: `http://localhost:3003/hdfcWebhook`
 3. Set Headers:
    - `Content-Type: application/json`
-4. Send the following raw JSON body:
+4. Send accordingly the data in the below format:
 
 ```json
 {
