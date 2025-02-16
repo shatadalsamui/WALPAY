@@ -1,11 +1,23 @@
   {
-  "name": "@repo/store",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "recoil": "^0.7.7"
-  },
-  "exports": {
-    "./balance": "./src/hooks/useBalance"
+    "name": "@repo/store",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+      "build": "tsc",
+      "dev": "tsc --watch"
+    },
+    "dependencies": {
+      "recoil": "^0.7.7"
+    },
+    "devDependencies": {
+      "typescript": "^5.3.3"
+    },
+    "exports": {
+      "./balance": {
+        "import": "./dist/hooks/useBalance.js",
+        "types": "./dist/hooks/useBalance.d.ts"
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   }
-}

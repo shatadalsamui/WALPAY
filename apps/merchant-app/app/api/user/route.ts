@@ -1,13 +1,14 @@
   import { NextResponse } from "next/server"
-import { PrismaClient } from "@repo/db/client";
-
-const client = new PrismaClient();
+import db from "@repo/db/client";
+import bcrypt from "bcrypt";
 
 export const GET = async () => {
-    await client.user.create({
+    await db.user.create({
         data: {
             email: "asd",
-            name: "adsads"
+            name: "adsads",
+            number: "1234567890",
+            password: await bcrypt.hash("password", 10)
         }
     })
     return NextResponse.json({
