@@ -71,6 +71,20 @@ cd apps/user-app
 npm run dev
 ```
 
+## CI/CD Workflow
+
+The project includes GitHub Actions for continuous integration:
+
+- **Build on PR**: Automatically runs `npm run build` on every pull request to `main` branch
+  - Verifies the project builds successfully
+  - Runs in Ubuntu environment with Node.js 20
+  - Located in `.github/workflows/build.yml`
+
+To manually trigger the workflow:
+1. Create a pull request to `main` branch
+2. The build will run automatically
+3. Check the "Actions" tab in GitHub for results
+
 ## Bank API Payment Confirmation
 
 When receiving payment confirmation from the bank API, the payload will have the following structure:
