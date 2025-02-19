@@ -4,38 +4,42 @@ name: Build on PR
 # Trigger: Runs when pull requests are opened/updated against main branch
 on:
   pull_request:
-    branches: [main]  # Only run for PRs targeting 'main'
+    branches: [main] # Final check before main
 
 # Jobs represent parallel execution units (we use one for building)
 jobs:
-  build:  # Job ID (can be any name)
+  build: # Job ID (can be any name)
     # Runner environment - ubuntu-latest recommended for best support
     runs-on: ubuntu-latest
-    
+
     # Steps execute sequentially - failure at any step fails the job
     steps:
       # 1. Checkout code - required to access repository contents
-      - uses: actions/checkout@v3  # Official GitHub checkout action
+      - uses: actions/checkout@v3 # Official GitHub checkout action
         # Optional: Uncomment for faster shallow clone (limits git history)
         # with:
         #   fetch-depth: 2
 
       # 2. Setup Node.js environment with specified version
-      - name: Setup Node.js  # Friendly name shown in logs
+      - name: Setup Node.js # Friendly name shown in logs
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Matches your local development version
+          node-version: "20" # Matches your local development version
           # Recommended: Enable caching for faster subsequent builds
           # cache: 'npm'  # Caches node_modules between runs
 
       # 3. Install dependencies using clean install (recommended for CI)
       - name: Install Dependencies
-        run: npm ci  # 'ci' is preferred over 'install' in CI environments
+        run: npm ci # 'ci' is preferred over 'install' in CI environments
         # Environment variables specific to this step
         # env:
         #   CI: true  # Some packages optimize for CI when this is set
 
-      # 4. Execute the build command defined in package.json
+      # 4. GENERATE PRISMA CLIENT - Generate DB client
+      - name: Generate prisma client
+        run: npm run db:generate # run the new script
+
+      # 5. Execute the build command defined in package.json
       - name: Build Project
         run: npm run build
         # Safety measure: Prevent hanging builds
