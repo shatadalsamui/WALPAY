@@ -80,6 +80,7 @@ The project includes GitHub Actions for continuous integration:
   - Runs in Ubuntu environment with Node.js 20
   - Located in `.github/workflows/build.yml`
 
+
 To manually trigger the workflow:
 1. Create a pull request to `main` branch
 2. The build will run automatically
