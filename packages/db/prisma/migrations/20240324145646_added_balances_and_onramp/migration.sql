@@ -1,4 +1,4 @@
--- CreateEnum
+ -- CreateEnum
 CREATE TYPE "OnRampStatus" AS ENUM ('Success', 'Failure', 'Processing');
 
 -- CreateTable
