@@ -23,7 +23,7 @@ cd WALPAY
 
 2. **Install dependencies**
 ```bash
-npm install or yarn install 
+npm install
 ```
 
 3. **Database Setup** (Choose one option)
