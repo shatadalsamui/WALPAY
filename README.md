@@ -1,12 +1,27 @@
-# WALPAY Project
+# WALPAY
+
+WalPay is a modern, wallet-based payment platform designed for seamless transactions between users and merchants. Built as a monorepo using Turborepo, it leverages Next.js, Prisma, and a modular package structure for scalability and maintainability.
 
 ## Project Structure
+
 ```
-packages/
-  db/         - Database schema and Prisma configuration
-apps/
-  user-app/   - Main application
-``
+.
+├── apps/
+│   ├── user-app/          # Next.js application for end users
+│   │   ├── app/           # App router directory
+│   │   ├── components/    # Reusable UI components
+│   │   ├── lib/           # Business logic and utilities
+│   │   └── ...
+│   └── merchant-app/      # Next.js application for merchants
+│
+├── packages/
+│   ├── db/                # Shared database schema and Prisma client
+│   ├── ui/                # Shared UI components library
+│   └── utils/             # Shared utility functions
+│
+├── turbo.json             # Turborepo configuration
+└── package.json           # Root package configuration
+```
 
 ## Prerequisites
 - Node.js v16+
