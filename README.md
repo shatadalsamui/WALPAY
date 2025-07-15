@@ -1,6 +1,5 @@
 # WALPAY Project
 
-
 ## Project Structure
 ```
 packages/
@@ -24,7 +23,7 @@ cd WALPAY
 
 2. **Install dependencies**
 ```bash
-npm install
+npm install or yarn install 
 ```
 
 3. **Database Setup** (Choose one option)
