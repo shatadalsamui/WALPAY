@@ -101,6 +101,6 @@ To test the payment confirmation webhook:
 }
 ```
 
-## Development Scripts
+### Development Scripts
 - `npm test` - Run tests
 - `npm run build` - Build production version
