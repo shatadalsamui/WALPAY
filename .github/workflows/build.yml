@@ -3,8 +3,10 @@ name: Build on PR
 
 # Trigger: Runs when pull requests are opened/updated against main branch
 on:
+  push:
+    branches: [development]  # CI on development branch
   pull_request:
-    branches: [main]  # Only run for PRs targeting 'main'
+    branches: [main]         # Final check before main
 
 # Jobs represent parallel execution units (we use one for building)
 jobs:
