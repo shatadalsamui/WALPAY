@@ -97,6 +97,7 @@ When receiving payment confirmation from the bank API, the payload will have the
 }
 ```
 
+
 This structure is used for both on-ramping transactions and payment confirmations.
 
 ### Testing with Postman
