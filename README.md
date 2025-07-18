@@ -87,6 +87,21 @@ To manually trigger the workflow:
 2. The build will run automatically
 3. Check the "Actions" tab in GitHub for results
 
+## Docker Support
+
+### userapp-walpay Container
+```bash
+# Build the container
+docker build -t userapp-walpay -f docker/dockerfile.user .
+
+# Run the container
+docker run userapp-walpay
+```
+
+### Configuration
+- Uses Node.js 20.x
+- Includes auto DB migration
+
 ## Bank API Payment Confirmation
 
 When receiving payment confirmation from the bank API, the payload will have the following structure:
@@ -120,5 +135,6 @@ To test the payment confirmation webhook:
 ### Development Scripts
 - `npm test` - Run tests
 - `npm run build` - Build production version
+ 
  
  
