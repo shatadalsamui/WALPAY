@@ -1,4 +1,5 @@
-  # WALPAY
+ 
+# WALPAY
 
 WalPay is a modern, wallet-based payment platform designed for seamless transactions between users and merchants. Built as a monorepo using Turborepo, it leverages Next.js, Prisma, and a modular package structure for scalability and maintainability.
 
@@ -119,3 +120,5 @@ To test the payment confirmation webhook:
 ### Development Scripts
 - `npm test` - Run tests
 - `npm run build` - Build production version
+ 
+ 
