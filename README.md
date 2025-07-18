@@ -81,6 +81,41 @@ The project includes GitHub Actions for continuous integration:
   - Runs in Ubuntu environment with Node.js 20
   - Located in `.github/workflows/build.yml`
 
+Our automated deployment pipeline ensures safe and reliable releases:
+
+### Branch Strategy
+- `main`: Production-ready code (protected branch)
+- `dev`: Active development branch
+- `feature/*`: Feature branches (created from `dev`)
+
+### Workflow Automation
+
+1. **Pre-Merge Validation** (build.yml)
+   - Triggers on PR creation/update
+   - Runs:
+     - Test suite
+     - Build verification
+     - Code quality checks
+   - Required for merge approval
+
+2. **Production Deployment** (deploy.yml)
+   - Triggers when code merges to `main`
+   - Automated steps:
+     - Docker image build
+     - Push to Docker Hub
+     - Deployment verification
+
+```mermaid
+graph LR
+  A[Feature Branch] -->|PR| B(dev)
+  B -->|PR + CI Checks| C(main)
+  C -->|Auto| D[Docker Hub]
+  D --> E[Production]
+```
+
+### Manual Steps
+- PR reviews required before merging to `main`
+- Version tagging triggers production deployments
 
 To manually trigger the workflow:
 1. Create a pull request to `main` branch
