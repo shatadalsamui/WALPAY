@@ -1,30 +1,31 @@
-name: Build and Deploy to Docker Hub
+name: Build and Deploy to Docker Hub  # Name of the GitHub Actions workflow
 
-on:
-  push:
-    branches:
-      - main
+on:  # Triggers for when this workflow should run
+  push:  # Run on push events
+    branches:  # Specifically for these branches
+      - main  # Only run when pushing to main branch
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check Out Repo
-      uses: actions/checkout@v2
-
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Build and Push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./docker/dockerfile.user
-        push: true
-        tags: shatadalsamui/userapp-walpay  # Replace with your Docker Hub username and repository .
-
-    - name: Verify Pushed Image
-      run: docker pull shatadalsamui/userapp-walpay  # Replace with your Docker Hub username and repository
+jobs:  # Define jobs to run
+  build-and-push:  # Job ID
+    runs-on: ubuntu-latest  # Run on GitHub's Ubuntu runner
+    
+    steps:  # List of steps to execute
+    - name: Check Out Repo  # Step 1: Get the code
+      uses: actions/checkout@v2  # Official GitHub action to checkout repository
+    
+    - name: Log in to Docker Hub  # Step 2: Authenticate with Docker Hub
+      uses: docker/login-action@v1  # Official Docker login action
+      with:  # Configuration for the action
+        username: ${{ secrets.DOCKER_USERNAME }}  # Docker username from GitHub secrets
+        password: ${{ secrets.DOCKER_PASSWORD }}  # Docker password from GitHub secrets
+    
+    - name: Build and Push Docker image  # Step 3: Build and push the image
+      uses: docker/build-push-action@v2  # Official Docker build/push action
+      with:  # Configuration for the action
+        context: .  # Build context (current directory)
+        file: ./docker/dockerfile.user  # Path to Dockerfile
+        push: true  # Push to registry after building
+        tags: shatadalsamui/userapp-walpay  # Image name/tag for Docker Hub
+    
+    - name: Verify Pushed Image  # Step 4: Verify the image was pushed
+      run: docker pull shatadalsamui/userapp-walpay  # Pull the image to verify it exists
