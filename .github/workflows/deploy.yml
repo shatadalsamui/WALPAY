@@ -24,7 +24,7 @@ jobs:
         context: .
         file: ./docker/dockerfile.user
         push: true
-        tags: shatadalsamui/userapp-walpay  # Replace with your Docker Hub username and repository
+        tags: shatadalsamui/userapp-walpay  # Replace with your Docker Hub username and repository .
 
     - name: Verify Pushed Image
       run: docker pull shatadalsamui/userapp-walpay  # Replace with your Docker Hub username and repository
