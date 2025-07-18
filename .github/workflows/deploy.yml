@@ -29,3 +29,15 @@ jobs:  # Define jobs to run
     
     - name: Verify Pushed Image  # Step 4: Verify the image was pushed
       run: docker pull shatadalsamui/userapp-walpay  # Pull the image to verify it exists
+      
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          sudo docker pull shatadalsamui/userapp-walpay
+          sudo docker stop userapp-walpay || true
+          sudo docker rm userapp-walpay || true
+          sudo docker run -d --name userapp-walpay -p 3005:3000 shatadalsamui/userapp-walpay
