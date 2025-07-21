@@ -114,13 +114,6 @@ Our automated deployment pipeline ensures safe and reliable releases:
      - Push to Docker Hub
      - Deployment verification
 
-```mermaid
-graph LR
-  A[Feature Branch] -->|PR| B(dev)
-  B -->|PR + CI Checks| C(main)
-  C -->|Auto| D[Docker Hub]
-  D --> E[Production]
-```
 
 ### Manual Steps
 - PR reviews required before merging to `main`
