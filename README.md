@@ -114,7 +114,6 @@ Our automated deployment pipeline ensures safe and reliable releases:
      - Push to Docker Hub
      - Deployment verification
 
-
 ### Manual Steps
 - PR reviews required before merging to `main`
 - Version tagging triggers production deployments
@@ -154,12 +153,6 @@ WalPay supports multiple authentication methods:
 - **Transaction History**: View recent transfers and deposits
 - **Secure Authentication**: Dual validation for signin/signup flows
 - **Balance Management**: Track and manage wallet balance
-
-## Recent Improvements
-
-- Fixed authentication flow to properly handle both signin (2 fields) and signup (4 fields)
-- Added transaction security with balance locking during transfers
-- Improved error handling for authentication failures
 
 ## Bank API Payment Confirmation
 
