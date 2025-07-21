@@ -23,7 +23,7 @@ export async function p2pTransfer(to: string, amount: number) {
         }
     }
     await prisma.$transaction(async (tx) => {
-        //Locking Sender's Balance top revent concurrent transfers
+        //Locking Sender's Balance to prevent concurrent transfers
         //locks after the first txn is initiated and only unlocks when the txn is completed
         await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;
 
