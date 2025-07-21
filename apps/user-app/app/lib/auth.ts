@@ -3,97 +3,98 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt";
 import { z } from "zod";
 
-const credentialsSchema = z.object({//Input validation
-    name: z.string()
-        .min(2, { message: "Name must be atleast 2 characters" })
-        .max(50, { message: "Name must be less than 50 characters" }),
+const baseSchema = z.object({//base input validation for signin
     phone: z.string()
         .min(10, { message: "Phone number must be 10 digits" })
-        .max(10, { message: "Phone number must be 10 digits" })
+        .max(10, { message: "Phone number must be 10 digits " })
         .regex(/^\d+$/, { message: "Phone number must contain only numbers" }),
     password: z.string()
         .min(8, { message: "Password must be at least 8 characters" })
         .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
-        .regex(/[0-9]/, { message: "Password must contain at least one number" })
+        .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" })
-})
+});
+
+const signupSchema = baseSchema.extend({//extended input validation for signup
+    name: z.string()
+        .min(2, { message: "Name must be atleast 2 characters" })
+        .max(50, { message: "Name must be under 50 characters" }),
+    email: z.string().email({ message: "Invalid email address" })
+});
 
 export const authOptions = {
-    // pages: {
-    //     signIn: '/signin',
-    //     signUp: '/signup',
-    //     error: '/error'
-    // },
+    pages: {
+        signIn: '/signin',
+        signUp: '/signup',
+        error: '/error'
+    },
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
                 name: { label: "Full Name", type: "text", placeholder: "Enter your Full Name" },
                 phone: { label: "Phone number", type: "text", placeholder: "Enter your phone number", required: true },
+                email: { label: "Email", type: "email", placeholder: "Enter your Email" },
                 password: { label: "Password", type: "password", placeholder: "...........", required: true }
             },
-            // TODO: User credentials type from next-aut
+
             async authorize(credentials: unknown) {
-
-                const validatedCredentials = credentialsSchema.safeParse(credentials);
-                if (!validatedCredentials.success) {
-                    return null;
-                }
-                const { name, phone, password } = validatedCredentials.data;
-                const hashedPassword = await bcrypt.hash(password, 10);
-                const existingUser = await db.user.findFirst({
-                    where: {
-                        number: phone
-                    }
-                });
-
-                if (existingUser) {
-                    const passwordValidation = await bcrypt.compare(password, existingUser.password);
-                    if (passwordValidation) {
-                        return {
-                            id: existingUser.id.toString(),
-                            name: existingUser.name,
-                            number: existingUser.number
-                        }
-                    }
+                if (!credentials || typeof credentials !== 'object') {
                     return null;
                 }
 
-                try {
-                    const user = await db.user.create({
+                const creds = credentials as Record<string, unknown>;
+
+                // If name and email exist, it's a signup attempt
+                if ('name' in creds && 'email' in creds) {
+                    const signupResult = signupSchema.safeParse(creds);
+                    if (!signupResult.success) {
+                        return null; // Validation failed
+                    }
+                    const { phone, password, name, email } = signupResult.data;
+                    const existingUser = await db.user.findUnique({ where: { number: phone } });
+
+                    if (existingUser) {
+                        return null; // User already exists
+                    }
+
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    const newUser = await db.user.create({
                         data: {
-                            name: name,
+                            name,
                             number: phone,
                             password: hashedPassword,
-                            Balance: {
-                                create: {
-                                    amount: 0,
-                                    locked: 0
-                                }
-                            }
+                            email,
+                            Balance: { create: { amount: 0, locked: 0 } }
                         }
                     });
-
-                    return {
-                        id: user.id.toString(),
-                        name: user.name,
-                        email: user.number
-                    }
-                } catch (e) {
-                    console.error(e);
+                    return { id: newUser.id.toString(), name: newUser.name, number: newUser.number };
                 }
 
-                return null
+                // Otherwise, it's a signin attempt
+                const signinResult = baseSchema.safeParse(creds);
+                if (!signinResult.success) {
+                    return null; // Validation failed
+                }
+
+                const { phone, password } = signinResult.data;
+                const user = await db.user.findUnique({ where: { number: phone } });
+
+                if (user && await bcrypt.compare(password, user.password)) {
+                    return { id: user.id.toString(), name: user.name, number: user.number };
+                }
+
+                return null;
             },
         })
     ],
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
-        // TODO: can u fix the type here? Using any is bad
         async session({ token, session }: any) {
-            session.user.id = token.sub
-
-            return session
+            if (token.sub && session.user) {
+                session.user.id = token.sub;
+            }
+            return session;
         }
     }
 }

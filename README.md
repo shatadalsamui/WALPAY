@@ -5,23 +5,33 @@ WalPay is a modern, wallet-based payment platform designed for seamless transact
 
 ## Project Structure
 
+Here's how the code is organized:
+
 ```
 .
 ├── apps/
-│   ├── user-app/          # Next.js application for end users
+│   ├── user-app/          # Customer-facing Next.js application
 │   │   ├── app/           # App router directory
-│   │   ├── components/    # Reusable UI components
-│   │   ├── lib/           # Business logic and utilities
+│   │   │   ├── (auth)/    # Authentication pages
+│   │   │   ├── (dashboard)/# User dashboard
+│   │   │   └── api/       # API routes
+│   │   ├── components/    # UI components (buttons, cards, forms)
+│   │   ├── lib/           # Core business logic
+│   │   │   ├── auth.ts    # Authentication config
+│   │   │   └── actions/   # Server actions
 │   │   └── ...
-│   └── merchant-app/      # Next.js application for merchants
+│   ├── merchant-app/      # Merchant portal
+│   │   └── lib/auth.ts    # Merchant auth setup
+│   └── bank-webhook/      # Bank integration service
 │
 ├── packages/
-│   ├── db/                # Shared database schema and Prisma client
-│   ├── ui/                # Shared UI components library
-│   └── utils/             # Shared utility functions
+│   ├── db/                # Database models (Prisma)
+│   ├── ui/                # Shared UI components
+│   ├── utils/             # Utility functions
+│   └── store/             # Global state management
 │
-├── turbo.json             # Turborepo configuration
-└── package.json           # Root package configuration
+├── turbo.json             # Turborepo config
+└── package.json           # Root dependencies
 ```
 
 ## Prerequisites
@@ -33,8 +43,8 @@ WalPay is a modern, wallet-based payment platform designed for seamless transact
 
 1. **Clone repository**
 ```bash
-git clone git@github.com:shatadalsamui/WALPAY.git
-cd WALPAY
+git clone git@github.com:shatadalsamui/WALPAY-NEW.git
+cd WALPAY-NEW
 ```
 
 2. **Install dependencies**
@@ -85,8 +95,7 @@ Our automated deployment pipeline ensures safe and reliable releases:
 
 ### Branch Strategy
 - `main`: Production-ready code (protected branch)
-- `dev`: Active development branch
-- `feature/*`: Feature branches (created from `dev`)
+- `development`: Active development branch
 
 ### Workflow Automation
 
@@ -136,6 +145,28 @@ docker run userapp-walpay
 ### Configuration
 - Uses Node.js 20.x
 - Includes auto DB migration
+
+## Authentication System
+
+WalPay supports multiple authentication methods:
+
+1. **Phone + Password**
+   - Secure signin/signup with phone number and password
+   - Password requirements: 8+ chars, uppercase, lowercase, special char
+   - Phone number validation (10 digits)
+
+## Key Features
+
+- **P2P Transfers**: Send money to other users via phone number
+- **Transaction History**: View recent transfers and deposits
+- **Secure Authentication**: Dual validation for signin/signup flows
+- **Balance Management**: Track and manage wallet balance
+
+## Recent Improvements
+
+- Fixed authentication flow to properly handle both signin (2 fields) and signup (4 fields)
+- Added transaction security with balance locking during transfers
+- Improved error handling for authentication failures
 
 ## Bank API Payment Confirmation
 
