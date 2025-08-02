@@ -11,8 +11,9 @@ export default function Layout({
         <div className="flex-1">
           <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
           <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer to Wallet" />
-          <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
+          <SidebarItem href={"/withdraw"} icon={<TransferIcon />} title="Transfer to Bank" />
           <SidebarItem href={"/p2p"} icon={<P2PTransferIcon />} title="P2P Transfer" />
+          <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
         </div>
         <div className="p-4 text-center text-sm text-gray-500 border-t border-slate-200">
           &copy; {new Date().getFullYear()} WalPay. All rights reserved.

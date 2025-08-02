@@ -17,6 +17,7 @@ model User {
   Balance           Balance[]
   sentTransfers     p2pTransfer[]       @relation(name: "FromUserRelation")
   receivedTransfers p2pTransfer[]       @relation(name: "ToUserRelation")
+  withdrawals       Withdrawal[]
 }
 
 model Merchant {
@@ -45,6 +46,24 @@ model OnRampTransaction {
   startTime DateTime
   userId    Int
   user      User         @relation(fields: [userId], references: [id])
+}
+
+model Withdrawal {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  amount          Int
+  bank            String
+  accountNumber   String
+  token           String?   @unique @map("withdrawal_token")  
+  status          String    @default("PENDING") // PENDING, COMPLETED, FAILED
+  bankReferenceId String?   // Added to store bank's reference ID
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  user            User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([bankReferenceId])
 }
 
 model Balance {

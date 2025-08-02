@@ -1,4 +1,4 @@
-  "use client"
+"use client"
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
 import { Center } from "@repo/ui/center";
@@ -45,7 +45,7 @@ export const AddMoney = () => {
                     await createOnRampTransaction(amount, provider)
                     window.location.href = redirectUrl || "";
                 }}>
-                    Add Money
+                    Add
                 </Button>
             </div>
         </div>
