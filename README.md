@@ -10,27 +10,49 @@ Here's how the code is organized:
 ```
 .
 ├── apps/
-│   ├── user-app/          # Customer-facing Next.js application
-│   │   ├── app/           # App router directory
-│   │   │   ├── (auth)/    # Authentication pages
-│   │   │   ├── (dashboard)/# User dashboard
-│   │   │   └── api/       # API routes
-│   │   ├── components/    # UI components (buttons, cards, forms)
-│   │   ├── lib/           # Core business logic
-│   │   │   ├── auth.ts    # Authentication config
-│   │   │   └── actions/   # Server actions
+│   ├── user-app/                  # Customer-facing Next.js application
+│   │   ├── app/                   # App router directory
+│   │   │   ├── (auth)/            # Authentication pages
+│   │   │   ├── (dashboard)/       # User dashboard
+│   │   │   │   ├── withdraw/      # Withdrawal pages
+│   │   │   │   └── ...
+│   │   │   └── api/               # API routes
+│   │   ├── components/            # UI components
+│   │   │   ├── withdraw/          # Withdrawal components
+│   │   │   └── ...
+│   │   ├── lib/                   # Core business logic
+│   │   │   ├── actions/
+│   │   │   │   ├── createWithdrawal.ts  # Withdrawal creation
+│   │   │   │   └── ...
+│   │   │   └── ...
 │   │   └── ...
-│   ├── merchant-app/      # Merchant portal
-│   │   └── lib/auth.ts    # Merchant auth setup
-│   └── bank-webhook/      # Bank integration service
+│   │
+│   ├── merchant-app/              # Merchant portal
+│   │   └── lib/auth.ts            # Merchant auth setup
+│   │
+│   └── bank-webhook/              # Bank integration service
+│       ├── src/
+│       │   ├── index.ts           # Webhook handlers
+│       │   └── types.ts           # Type definitions
+│       └── ...
 │
 ├── packages/
-│   ├── db/                # Database models (Prisma)
-│   ├── ui/                # Shared UI components
-│   ├── store/             # Global state management
+│   ├── db/                        # Database models (Prisma)
+│   │   ├── prisma/
+│   │   │   └── schema.prisma      # Withdrawal model and relations
+│   │   └── ...
+│   │
+│   ├── ui/                        # Shared UI components
+│   │   ├── components/
+│   │   │   ├── withdraw/         # Reusable withdrawal components
+│   │   │   └── ...
+│   │   └── ...
+│   │
+│   └── store/                     # Global state management
+│       └── ...
 │
-├── turbo.json             # Turborepo config
-└── package.json           # Root dependencies
+├── turbo.json                     # Turborepo config
+└── package.json                   # Root dependencies
 ```
 
 ## Prerequisites
@@ -149,14 +171,18 @@ WalPay supports multiple authentication methods:
 ## Key Features
 
 - **P2P Transfers**: Send money to other users via phone number
-- **Transaction History**: View recent transfers and deposits
+- **Bank Withdrawals**: Withdraw funds to bank accounts
+- **Transaction History**: View recent transfers, deposits, and withdrawals
 - **Secure Authentication**: Dual validation for signin/signup flows
-- **Balance Management**: Track and manage wallet balance
+- **Balance Management**: Track and manage wallet balance with locked amount support
 
-## Bank API Payment Confirmation
+## Bank Integration
 
-When receiving payment confirmation from the bank API, the payload will have the following structure:
+### 1. Deposit Webhook
 
+**Endpoint**: `POST /hdfcWebhook`
+
+**Request Format**:
 ```json
 {
     "token": "970.4572088875194",
@@ -165,26 +191,60 @@ When receiving payment confirmation from the bank API, the payload will have the
 }
 ```
 
-This structure is used for both on-ramping transactions and payment confirmations.
+### 2. Withdrawal Webhook
+
+**Endpoint**: `POST /hdfcWithdrawalWebhook`
+
+**Request Format**:
+```json
+{
+    "token": "wth_f745c384-b095-421b-afd5-e29103486338",
+    "status": "SUCCESS",
+    "bankReferenceId": "BANK_REF_123",
+    "amount": 10000
+}
+```
+
+**Status Values**:
+- `SUCCESS`: Withdrawal processed successfully
+- `FAILED`: Withdrawal failed (include `failureReason`)
+
+**Amount**: Always in paisa (e.g., 10000 = ₹100.00)
 
 ### Testing with Postman
-To test the payment confirmation webhook:
-1. Open Postman
-2. Create a new POST request to: `http://localhost:3003/hdfcWebhook`
-3. Set Headers:
-   - `Content-Type: application/json`
-4. Send accordingly the data in the below format:
 
-```json
-{
-    "token": "970.4572088875194",
-    "user_identifier": 1,
-    "amount": "210"
-}
-```
+#### Test Deposit Webhook:
+1. Create POST request to: `http://localhost:3003/hdfcWebhook`
+2. Set Headers:
+   - `Content-Type: application/json`
+3. Send test payload
+
+#### Test Withdrawal Webhook:
+1. Create POST request to: `http://localhost:3003/hdfcWithdrawalWebhook`
+2. Set Headers:
+   - `Content-Type: application/json`
+   - `x-webhook-secret: your_webhook_secret_here`
+3. Send test payload
+
+## Withdrawal Flow
+
+1. **Create Withdrawal**
+   - User initiates withdrawal with amount and bank details
+   - System generates unique withdrawal token
+   - Amount is locked in user's balance
+
+2. **Bank Processing**
+   - Bank processes the withdrawal request
+   - Sends webhook notification with status
+
+3. **Status Updates**
+   - On SUCCESS: Locked amount is deducted
+   - On FAILED: Locked amount is returned to available balance
 
 ### Development Scripts
 - `npm test` - Run tests
 - `npm run build` - Build production version
+- `npm run dev` - Run in development mode
+- `npm run lint` - Run linter
  
  
