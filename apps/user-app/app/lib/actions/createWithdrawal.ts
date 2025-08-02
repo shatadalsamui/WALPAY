@@ -14,9 +14,32 @@ interface WithdrawRequest {
 export async function createWithdrawal(request: WithdrawRequest) {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
-    
+
     if (!userId) {
         return { success: false, message: "User not authenticated" };
+    }
+    // 1. Minimum amount validation (₹100)
+    if (request.amount < 100) {
+        return {
+            success: false,
+            message: "Minimum withdrawal amount is ₹100"
+        };
+    }
+
+    // 2. Account number format validation
+    if (!/^\d{9,18}$/.test(request.accountNumber)) {
+        return {
+            success: false,
+            message: "Account number must be 9-18 digits"
+        };
+    }
+
+    // 3. Bank selection check
+    if (!request.bank) {
+        return {
+            success: false,
+            message: "Please select a bank"
+        };
     }
 
     // Generate a unique token for this withdrawal
@@ -33,9 +56,9 @@ export async function createWithdrawal(request: WithdrawRequest) {
         });
 
         if (!balance || balance.amount < amountInPaisa) {
-            return { 
-                success: false, 
-                message: `Insufficient balance. Available: ₹${(balance?.amount || 0) / 100}` 
+            return {
+                success: false,
+                message: `Insufficient balance. Available: ₹${(balance?.amount || 0) / 100}`
             };
         }
 
@@ -60,8 +83,8 @@ export async function createWithdrawal(request: WithdrawRequest) {
             }
         });
 
-        return { 
-            success: true, 
+        return {
+            success: true,
             message: "Withdrawal request created successfully",
             withdrawalId: withdrawal.id,
             token: token
