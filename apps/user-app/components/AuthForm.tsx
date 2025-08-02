@@ -19,6 +19,7 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,11 +92,21 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
           />
         )}
 
-        <TextInput
-          label="Password"
-          onChange={(value) => setFormData({ ...formData, password: value })}
-          placeholder="Enter your password"
-        />
+        <div className="relative">
+          <TextInput
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            onChange={(value) => setFormData({ ...formData, password: value })}
+            placeholder="Enter your password"
+          />
+          <button 
+            type="button" 
+            className="absolute right-3 top-[44px] text-gray-500 hover:text-gray-700"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
+        </div>
         <div className="pt-4">
           <Button onClick={handleButtonClick}>
             {loading ? 'Processing...' : mode === 'signup' ? 'Sign Up' : 'Sign In'}

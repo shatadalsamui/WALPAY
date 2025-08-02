@@ -3,7 +3,7 @@ name: Build and Deploy to Docker Hub  # Name of the GitHub Actions workflow
 on:  # Triggers for when this workflow should run
   push:  # Run on push events
     branches:  # Specifically for these branches
-      - main  # Only run when pushing to main branch
+      - development  # Only run when pushing to main branch
 
 jobs:  # Define jobs to run
   build-and-push:  # Job ID

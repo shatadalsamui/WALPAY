@@ -7,12 +7,15 @@ export default function Layout({
 }): JSX.Element {
   return (
     <div className="flex">
-      <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-8">
-        <div>
+      <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-8 flex flex-col">
+        <div className="flex-1">
           <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
-          <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer" />
+          <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer to Wallet" />
           <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
           <SidebarItem href={"/p2p"} icon={<P2PTransferIcon />} title="P2P Transfer" />
+        </div>
+        <div className="p-4 text-center text-sm text-gray-500 border-t border-slate-200">
+          &copy; {new Date().getFullYear()} WalPay. All rights reserved.
         </div>
       </div>
       {children}

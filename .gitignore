@@ -42,3 +42,5 @@ docker-compose*.yml
 
 # Local docker artifacts
 **/.docker/**
+# Local Netlify folder
+.netlify
