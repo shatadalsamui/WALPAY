@@ -27,8 +27,7 @@ Here's how the code is organized:
 ├── packages/
 │   ├── db/                # Database models (Prisma)
 │   ├── ui/                # Shared UI components
-│   ├── utils/             # Utility functions
-│   └── store/             # Global state management
+│   ├── store/             # Global state management
 │
 ├── turbo.json             # Turborepo config
 └── package.json           # Root dependencies
