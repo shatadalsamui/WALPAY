@@ -26,7 +26,7 @@ export const OnRampTransactions = ({
                             Received INR
                         </div>
                         <div className="text-slate-600 text-xs">
-                            {t.time.toDateString()}
+                            {t.time.toLocaleString('en-IN')}
                         </div>
                     </div>
                     <div className={`text-right min-w-[120px] ${t.status.toLowerCase() === "success" ? "text-green-500" : t.status.toLowerCase() === "failure" ? "text-red-500" : "text-yellow-500"}`}>
