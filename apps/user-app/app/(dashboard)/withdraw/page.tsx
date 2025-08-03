@@ -32,7 +32,7 @@ async function getWithdrawTransactions() {
   return txns.map(t => ({
     time: t.createdAt,
     amount: t.amount,
-    status: (t.status === "COMPLETED" ? "Success" : t.status) as "Success" | "Failure" | "Processing",
+    status: (t.status === "COMPLETED" ? "Success" : t.status === "PENDING" ? "Processing" : t.status === "PENDING" ? "Processing" : t.status) as "Success" | "Failure" | "Processing",
     provider: "Bank Transfer"
   }));
 }

@@ -23,16 +23,16 @@ export const OnRampTransactions = ({
                 <div className="flex justify-between border-b border-slate-300 py-2">
                     <div>
                         <div className="text-sm">
-                            Processed INR
+                            Received INR
                         </div>
                         <div className="text-slate-600 text-xs">
                             {t.time.toDateString()}
                         </div>
                     </div>
-                    <div className={`flex flex-col justify-center ${t.status === "Success" ? "text-green-500" : t.status === "Failure" ? "text-red-500" : "text-yellow-500"}`}>
+                    <div className={`text-right min-w-[120px] ${t.status.toLowerCase() === "success" ? "text-green-500" : t.status.toLowerCase() === "failure" ? "text-red-500" : "text-yellow-500"}`}>
                         + Rs {t.amount / 100}
                         <div className="text-xs">
-                            {t.status === "Processing" ? "Pending bank confirmation" : t.status}
+                            {t.status.toLowerCase() === "processing" ? "Pending bank confirmation" : t.status}
                         </div>
                     </div>
                 </div>

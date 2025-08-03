@@ -29,10 +29,10 @@ export const WithdrawTransactions = ({
                             {t.time.toDateString()}
                         </div>
                     </div>
-                    <div className={`flex flex-col items-end ${t.status.toLowerCase() === "success" ? "text-green-500" : t.status.toLowerCase() === "failure" ? "text-red-500" : "text-yellow-500"}`}>
+                    <div className={`text-right min-w-[120px] ${t.status.toLowerCase() === "success" ? "text-green-500" : t.status.toLowerCase() === "failure" ? "text-red-500" : "text-yellow-500"}`}>
                         - Rs {t.amount / 100}
                         <div className="text-xs">
-                            {t.status.toLowerCase() === "processing" ? "Processing withdrawal" : t.status}
+                            {t.status.toLowerCase() === "processing" ? "Pending bank confirmation" : t.status}
                         </div>
                     </div>
                 </div>
