@@ -10,12 +10,18 @@ import { z } from "zod";
 export function SendCard() {
     const [number, setNumber] = useState("");
     const [amount, setAmount] = useState("");
-    const [message, setMessage] = useState<{text: string; type: 'success' | 'error'} | null>(null);
+    const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    //Input validation Schema
     const transferSchema = z.object({
-        number: z.string().length(10, { message: "Phone number must be exactly 10 digits (no spaces or special characters)" }),
-        amount: z.number().min(10, { message: "Minimum amount is ₹10" }).max(10000, { message: "Maximum amount is ₹10,000" })
+        number: z.string()
+            .length(10, { message: "Phone number must be exactly 10 digits (no spaces or special characters)" })
+            .regex(/^\d+$/, "Phone number must contain only digits"),
+        amount: z.number()
+            .positive("Amount must be positive")
+            .min(10, { message: "Minimum amount is ₹10" })
+            .max(10000, { message: "Maximum amount is ₹10,000" })
     });
 
     const handleSubmit = async () => {
@@ -63,7 +69,7 @@ export function SendCard() {
                                 {message.text}
                             </div>
                         )}
-                        
+
                         <div className="pb-2">
                             <TextInput
                                 placeholder="Number"
@@ -72,7 +78,7 @@ export function SendCard() {
                                 value={number}
                             />
                         </div>
-                        
+
                         <div className="pb-2">
                             <TextInput
                                 placeholder="Amount"
@@ -81,7 +87,7 @@ export function SendCard() {
                                 value={amount}
                             />
                         </div>
-                        
+
                         <div className="pt-4 flex justify-center">
                             <Button onClick={handleSubmit} disabled={isLoading}>
                                 {isLoading ? 'Processing...' : 'Send'}
