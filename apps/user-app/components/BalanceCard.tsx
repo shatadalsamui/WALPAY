@@ -1,4 +1,3 @@
-"use client"
 import { Card } from "@repo/ui/card";
 
 export const BalanceCard = ({ amount, locked }: {
@@ -23,10 +22,10 @@ export const BalanceCard = ({ amount, locked }: {
             </div>
         </div>
         <div className="flex justify-between border-b border-slate-300 py-2">
-            <div className="font-bold">
+            <div>
                 Total Balance
             </div>
-            <div>
+            <div className="font-bold">
                 {((locked + amount) / 100).toFixed(2)} INR
             </div>
         </div>
