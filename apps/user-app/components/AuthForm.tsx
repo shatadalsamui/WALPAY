@@ -6,6 +6,25 @@ import { Button } from "@repo/ui/button"
 import { TextInput } from "@repo/ui/textinput"
 import { Card } from "@repo/ui/card"
 
+
+//Input validations
+const validatePhone = (phone: string) =>
+  /^\d{10}$/.test(phone);
+
+const validatePassword = (password: string) =>
+  password.length >= 8 && 
+  password.length <= 20 &&
+  /[A-Z]/.test(password) &&
+  /[a-z]/.test(password) &&
+  /[0-9]/.test(password) &&
+  /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+const validateName = (name: string) =>
+  name.length >= 2 && name.length <= 50;
+
+const validateEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 type AuthFormProps = {
   mode?: 'signup' | 'signin'
 }
@@ -25,17 +44,44 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError('')
+    setError('');
+
+    if (!validatePhone(formData.phone)) {
+      setError('Phone number must be 10 digits and contain only numbers !');
+      setLoading(false);
+      return;
+    }
+
+    // Password validation (matches Zod schema)
+    if (!validatePassword(formData.password)) {
+      setError('Password must be 8-20 characters with uppercase, lowercase, number, and special character !');
+      setLoading(false);
+      return;
+    }
+
+    // Signup-specific validations
+    if (mode === 'signup') {
+      if (!validateName(formData.name)) {
+        setError('Name must be 2-50 characters !');
+        setLoading(false);
+        return;
+      }
+      if (!validateEmail(formData.email)) {
+        setError('Invalid email address !');
+        setLoading(false);
+        return;
+      }
+    }
 
     try {
-      const credentials = mode === 'signup' ? { 
-        name: formData.name, 
-        email: formData.email, 
+      const credentials = mode === 'signup' ? {
+        name: formData.name,
+        email: formData.email,
         phone: formData.phone,
         password: formData.password
-      } : { 
-        phone: formData.phone, 
-        password: formData.password 
+      } : {
+        phone: formData.phone,
+        password: formData.password
       };
 
       console.log('Sending credentials:', credentials);
@@ -99,8 +145,8 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
             onChange={(value) => setFormData({ ...formData, password: value })}
             placeholder="Enter your password"
           />
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="absolute right-3 top-[44px] text-gray-500 hover:text-gray-700"
             onClick={() => setShowPassword(!showPassword)}
           >

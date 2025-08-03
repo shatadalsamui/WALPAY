@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt";
 import { z } from "zod";
 
+
 const baseSchema = z.object({//base input validation for signin
     phone: z.string()
         .min(10, { message: "Phone number must be 10 digits" })
@@ -10,8 +11,10 @@ const baseSchema = z.object({//base input validation for signin
         .regex(/^\d+$/, { message: "Phone number must contain only numbers" }),
     password: z.string()
         .min(8, { message: "Password must be at least 8 characters" })
+        .max(20, { message: "Password must be at most 20 characters" })
         .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
         .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
+        .regex(/[0-9]/, { message: "Password must contain at least one number" })
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" })
 });
 
