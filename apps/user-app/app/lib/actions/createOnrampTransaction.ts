@@ -1,17 +1,34 @@
 "use server"
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client"
+import { z } from "zod";
 
 export async function createOnRampTransaction(amount: number, provider: string) {
 
     const session = await getServerSession(authOptions);
 
-    if (!session?.user || !session.user?.id) {//check if the user is logged in and session is active or not ..... else return from here 
-        return {
-            message: "Unathenticated user"
+    // Define validation schema
+    const addMoneySchema = z.object({
+        amount: z.number()
+            .min(500, "Minimum amount is ₹500")
+            .positive("Amount must be positive"),
+        provider: z.string()
+            .min(1, "Please select a bank")
+    });
+
+    // Validate input
+    const validationResult = addMoneySchema.safeParse({ amount, provider });
+    if (!validationResult.success) {
+        const firstError = validationResult.error.issues[0];
+        if (!firstError) {
+            throw new Error("Validation failed");
         }
+        throw new Error(firstError.message);
+    }
+
+    if (!session?.user || !session.user?.id) {//check if the user is logged in and session is active or not ..... else return from here 
+        throw new Error("Unauthenticated user");
     }
 
     const token = (Math.random() * 1000).toString();
