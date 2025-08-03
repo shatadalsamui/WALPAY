@@ -114,7 +114,6 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
           {error}
         </div>
       )}
-
       <form onSubmit={handleSubmit} className="space-y-4">
         {mode === 'signup' && (
           <TextInput
@@ -159,6 +158,29 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
           </Button>
         </div>
       </form>
+      <div className="mt-4 text-center text-sm">
+        {mode === 'signin' ? (
+          <p>
+            Don't have an account?{' '}
+            <a 
+              href="/signup" 
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign up
+            </a>
+          </p>
+        ) : (
+          <p>
+            Already have an account?{' '}
+            <a 
+              href="/signin" 
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign in
+            </a>
+          </p>
+        )}
+      </div>
     </Card>
   )
 }
