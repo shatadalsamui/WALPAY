@@ -1,3 +1,4 @@
+"use client"
 import { Card } from "@repo/ui/card";
 
 export const WithdrawTransactions = ({
@@ -30,7 +31,7 @@ export const WithdrawTransactions = ({
                         </div>
                     </div>
                     <div className={`text-right min-w-[120px] ${t.status.toLowerCase() === "success" ? "text-green-500" : t.status.toLowerCase() === "failure" ? "text-red-500" : "text-yellow-500"}`}>
-                        - Rs {t.amount / 100}
+                        - Rs {(t.amount / 100).toFixed(2)}
                         <div className="text-xs">
                             {t.status.toLowerCase() === "processing" ? "Pending bank confirmation" : t.status}
                         </div>

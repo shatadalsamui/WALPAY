@@ -25,6 +25,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "esbuild": "^0.25.6"
+    "esbuild": "^0.25.6",
+    "lucide-react": "^0.536.0"
   }
 }
