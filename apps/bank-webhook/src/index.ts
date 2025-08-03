@@ -50,6 +50,7 @@ app.post("/hdfcWebhook", verifyWebhook, async (req, res) => {
                 },
                 data: {
                     status: "Success",
+                    endTime: new Date()
                 }
             })
         ]);

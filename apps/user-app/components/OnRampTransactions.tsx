@@ -1,4 +1,4 @@
-  import { Card } from "@repo/ui/card"
+import { Card } from "@repo/ui/card"
 
 export const OnRampTransactions = ({
     transactions
@@ -6,8 +6,7 @@ export const OnRampTransactions = ({
     transactions: {
         time: Date,
         amount: number,
-        // TODO: Can the type of `status` be more specific?
-        status: string,
+        status: "Success" | "Failure" | "Processing",
         provider: string
     }[]
 }) => {
@@ -20,20 +19,24 @@ export const OnRampTransactions = ({
     }
     return <Card title="Recent Transactions">
         <div className="pt-2">
-            {transactions.map(t => <div className="flex justify-between">
-                <div>
-                    <div className="text-sm">
-                        Processed INR
+            {transactions.map(t => (
+                <div className="flex justify-between border-b border-slate-300 py-2">
+                    <div>
+                        <div className="text-sm">
+                            Received INR
+                        </div>
+                        <div className="text-slate-600 text-xs">
+                            {t.time.toDateString()}
+                        </div>
                     </div>
-                    <div className="text-slate-600 text-xs">
-                        {t.time.toDateString()}
+                    <div className={`flex flex-col justify-center ${t.status === "Success" ? "text-green-500" : t.status === "Failure" ? "text-red-500" : "text-yellow-500"}`}>
+                        + Rs {t.amount / 100}
+                        <div className="text-xs">
+                            {t.status === "Processing" ? "Pending bank confirmation" : t.status}
+                        </div>
                     </div>
                 </div>
-                <div className="flex flex-col justify-center">
-                    + Rs {t.amount / 100}
-                </div>
-
-            </div>)}
+            ))}
         </div>
     </Card>
 }

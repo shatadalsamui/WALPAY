@@ -1,4 +1,4 @@
-  "use server"
+"use server"
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
@@ -27,6 +27,6 @@ export async function createOnRampTransaction(amount: number, provider: string) 
     });
 
     return {
-        message : "Done"
+        message: "Done"
     }
 }
