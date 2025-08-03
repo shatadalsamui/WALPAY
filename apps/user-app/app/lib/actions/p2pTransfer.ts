@@ -7,9 +7,7 @@ export async function p2pTransfer(to: string, amount: number) {
     const session = await getServerSession(authOptions);
     const from = session?.user?.id;
     if (!from) {
-        return {
-            message: "Error while sending"
-        }
+        throw new Error("Unauthorized");
     }
     const toUser = await prisma.user.findFirst({
         where: {
@@ -18,9 +16,7 @@ export async function p2pTransfer(to: string, amount: number) {
     });
 
     if (!toUser) {
-        return {
-            message: "User not found"
-        }
+        throw new Error("Recipient not found");
     }
     await prisma.$transaction(async (tx) => {
         //Locking Sender's Balance to prevent concurrent transfers
@@ -51,6 +47,6 @@ export async function p2pTransfer(to: string, amount: number) {
                 amount,
                 timestamp: new Date()
             }
-        })
+        });
     });
 }
