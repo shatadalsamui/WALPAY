@@ -12,7 +12,7 @@ const validatePhone = (phone: string) =>
   /^\d{10}$/.test(phone);
 
 const validatePassword = (password: string) =>
-  password.length >= 8 && 
+  password.length >= 8 &&
   password.length <= 20 &&
   /[A-Z]/.test(password) &&
   /[a-z]/.test(password) &&
@@ -161,9 +161,9 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
       <div className="mt-4 text-center text-sm">
         {mode === 'signin' ? (
           <p>
-            Don't have an account?{' '}
-            <a 
-              href="/signup" 
+            Don't have an account ?{' '}
+            <a
+              href="/signup"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
               Sign up
@@ -171,9 +171,9 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
           </p>
         ) : (
           <p>
-            Already have an account?{' '}
-            <a 
-              href="/signin" 
+            Already have an account ?{' '}
+            <a
+              href="/signin"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
               Sign in
