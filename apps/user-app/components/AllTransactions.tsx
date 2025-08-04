@@ -51,7 +51,7 @@ export const AllTransactions = ({
 
   return (
     <Card title="All Transactions">
-      <div className="flex flex-wrap justify-left gap-2 pt-4 mb-6">
+      <div className="flex flex-wrap justify-left gap-2 pt-4 mb-5">
         {filters.map(filter => (
           <button
             key={filter.id}
@@ -68,75 +68,60 @@ export const AllTransactions = ({
 
       <div className="space-y-3">
         {filteredTransactions.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center text-gray-500">
             No transactions found
           </div>
         ) : (
           filteredTransactions.map(t => (
             <div
               key={`${t.type}-${t.id}`}
-              className="p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
+              className="pt-1 pr-3 pl-3 pb-3 rounded-lg border border-gray-200 hover:shadow-md transition-shadow grid grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_auto_auto] gap-y-1"
             >
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="font-medium">
-                    {t.type === 'ON_RAMP' ? 'Deposit to Wallet' :
-                      t.type === 'WITHDRAW' ? 'Withdrawal to Bank' :
-                        t.isSent
-                          ? `P2P Transfer, Sent to ${t.toUser.name || 'User'}`
-                          : `P2P Transfer, Received from ${t.fromUser.name || 'User'}`}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {t.timestamp.toLocaleString('en-IN')}
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  {t.type === 'ON_RAMP' && (
-                    <>
-                      <div className="text-green-600 font-medium">
-                        + ₹{(t.amount / 100).toFixed(2)}
-                      </div>
-                      <div className="text-xs text-gray-500 pt-1">
-                        {t.status}
-                      </div>
-                    </>
-                  )}
-                  {t.type === 'WITHDRAW' && (
-                    <>
-                      <div className="text-red-600 font-medium">
-                        - ₹{(t.amount / 100).toFixed(2)}
-                      </div>
-                      <div className="text-xs text-gray-500 pt-1">
-                        {t.status}
-                      </div>
-                    </>
-                  )}
-                  {t.type === 'P2P' && (
-                    <div className={t.isSent ? 'text-red-600 font-medium' : 'text-green-600 font-medium'}>
-                      {t.isSent ? '-' : '+'} ₹{(t.amount / 100).toFixed(2)}
-                    </div>
-                  )}
-                </div>
+              <div className="font-medium truncate row-start-1 col-start-1">
+                {t.type === 'ON_RAMP' ? 'Deposit to Wallet' :
+                  t.type === 'WITHDRAW' ? 'Withdrawal to Bank' :
+                    t.isSent
+                      ? `P2P Transfer, Sent to ${t.toUser.name || 'User'}`
+                      : `P2P Transfer, Received from ${t.fromUser.name || 'User'}`}
               </div>
 
-              {t.type === 'ON_RAMP' && (
-                <div className="text-xs text-gray-500 mt-1">
-                  Provider: {t.provider}
-                </div>
-              )}
-              {t.type === 'WITHDRAW' && (
-                <div className="text-xs text-gray-500 mt-1">
-                  To Acc No. : {t.To_AccNo}
-                </div>
-              )}
-              {t.type === 'P2P' && (
-                <div className="text-xs text-gray-500 mt-1">
-                  {t.isSent
-                    ? `To: ${t.toUser.number}`
-                    : `From: ${t.fromUser.number}`}
-                </div>
-              )}
+              <div className="text-right row-start-1 col-start-2 row-span-2 self-start">
+                {t.type === 'ON_RAMP' && (
+                  <>
+                    <div className="text-green-600 font-medium">
+                      + ₹{(t.amount / 100).toFixed(2)}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {t.status}
+                    </div>
+                  </>
+                )}
+                {t.type === 'WITHDRAW' && (
+                  <>
+                    <div className="text-red-600 font-medium">
+                      - ₹{(t.amount / 100).toFixed(2)}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {t.status}
+                    </div>
+                  </>
+                )}
+                {t.type === 'P2P' && (
+                  <div className={t.isSent ? 'text-red-600 font-medium' : 'text-green-600 font-medium'}>
+                    {t.isSent ? '-' : '+'} ₹{(t.amount / 100).toFixed(2)}
+                  </div>
+                )}
+              </div>
+
+              <div className="text-xs text-gray-500 truncate row-start-2 col-start-1">
+                {t.type === 'ON_RAMP' ? `Provider: ${t.provider}` :
+                  t.type === 'WITHDRAW' ? `To Acc No. : ${t.To_AccNo}` :
+                    t.isSent ? `To: ${t.toUser.number}` : `From: ${t.fromUser.number}`}
+              </div>
+
+              <div className="text-sm text-gray-500 pt-1.5 mt-1.5 border-t border-gray-100 row-start-3 col-span-2">
+                {t.timestamp.toLocaleString('en-IN')}
+              </div>
             </div>
           ))
         )}
