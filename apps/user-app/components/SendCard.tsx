@@ -60,10 +60,10 @@ export function SendCard() {
     };
 
     return (
-        <div className="h-[60vh]">
+        <div>
             <Center>
                 <Card title="Send to Phone Number">
-                    <div className="min-w-[32rem] pt-2">
+                    <div className="min-w-[46.5rem] pt-2">
                         {message && (
                             <div className={`mb-4 p-2 rounded text-sm ${message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                 {message.text}
