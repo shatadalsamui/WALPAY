@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt";
 import { z } from "zod";
 
-
 const baseSchema = z.object({//base input validation for signin
     phone: z.string()
         .min(10, { message: "Phone number must be 10 digits" })

@@ -133,8 +133,8 @@ export const AllTransactions = ({
               {t.type === 'P2P' && (
                 <div className="text-xs text-gray-500 mt-1">
                   {t.isSent
-                    ? `To: ${t.toUser.name || t.toUser.number}`
-                    : `From: ${t.fromUser.name || t.fromUser.number}`}
+                    ? `To: ${t.toUser.number}`
+                    : `From: ${t.fromUser.number}`}
                 </div>
               )}
             </div>
