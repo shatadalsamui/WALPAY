@@ -11,8 +11,8 @@ const transferSchema = z.object({
         .regex(/^\d+$/, "Phone number must contain only digits"),
     amount: z.number()
         .positive("Amount must be positive")
-        .min(10, "Minimum transfer is ₹10")
-        .max(10000, "maximum transfer is ₹10000")
+        .min(1000, "Minimum transfer is ₹10")
+        .max(1000000, "maximum transfer is ₹10000")
 })
 
 export async function p2pTransfer(to: string, amount: number) {
