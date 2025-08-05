@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "dotenv -e ../../packages/db/.env -- next dev --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0"
@@ -28,6 +28,7 @@
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.19",
+    "dotenv-cli": "^4.0.0",
     "eslint": "^8.57.0",
     "null-loader": "^4.0.1",
     "postcss": "^8.4.38",

@@ -13,7 +13,9 @@
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/uuid": "^10.0.0",
+    "dotenv-cli": "^7.4.2",
     "prettier": "^3.2.5",
+    "prisma": "^6.13.0",
     "turbo": "latest"
   },
   "engines": {
@@ -25,6 +27,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@prisma/client": "^6.13.0",
     "esbuild": "^0.25.6",
     "lucide-react": "^0.536.0"
   }
