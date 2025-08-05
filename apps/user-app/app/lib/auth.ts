@@ -76,7 +76,7 @@ export const authOptions = {
                 // Otherwise, it's a signin attempt
                 const signinResult = baseSchema.safeParse(creds);
                 if (!signinResult.success) {
-                    return null; // Validation failed
+                    return null;// Validation failed
                 }
 
                 const { phone, password } = signinResult.data;
