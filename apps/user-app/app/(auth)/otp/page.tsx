@@ -4,6 +4,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Form } from "../../../components/otpForm";
 import { Center } from "@repo/ui/center";
+import { z } from "zod";
+
+const otpSchema = z.string()
+    .length(6, { message: "OTP must be exactly 6 digits." })
+    .regex(/^\d+$/, { message: "OTP must contain only numbers and no spaces." });
 
 function OTPSignInPage() {
     const [otp, setOtp] = useState("");
@@ -19,14 +24,21 @@ function OTPSignInPage() {
             setSignupData(JSON.parse(storedData));
         } else {
             setError("Missing user data. Please try signing up again.");
-            // Optionally, redirect to signup if no data is found
-            // router.push('/signup');
         }
     }, []);
 
     const handleSubmit = async () => {
         setLoading(true);
         setError("");
+
+        const validationResult = otpSchema.safeParse(otp);
+        if (!validationResult.success) {
+            const firstError = validationResult.error.issues?.[0]?.message || "Invalid OTP format.";
+            setError(firstError);
+            setLoading(false);
+            return;
+        }
+
 
         if (!signupData) {
             setError("Missing user data. Please try signing up again.");
