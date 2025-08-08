@@ -47,6 +47,7 @@ function OTPSignInPage() {
             });
 
             if (result?.ok) {
+                sessionStorage.removeItem('signupData'); // Clear signup data on successful login
                 router.push("/dashboard");
             } else {
                 setError(result?.error || "Invalid OTP. Please try again.");
