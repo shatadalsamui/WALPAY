@@ -86,6 +86,35 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
 
       console.log('Sending credentials:', credentials);
 
+      if (mode === 'signup') {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(credentials),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setError(data.error || 'Signup failed');
+          setLoading(false);
+          return;
+        }
+
+        // Store user details in session storage for OTP verification
+        sessionStorage.setItem('signupData', JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+        }));
+        router.push(`/otp`);
+        return;
+      }
+
+      // Existing sign-in logic for mode === 'signin'
       const result = await signIn('credentials', {
         ...credentials,
         redirect: false

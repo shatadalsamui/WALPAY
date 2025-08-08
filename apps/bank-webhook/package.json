@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js && cp -r ../../node_modules/.prisma/client dist/",
-    "start": "dotenv -e ../../packages/db/.env -- sh -c 'PRISMA_QUERY_ENGINE_LIBRARY=./dist/client/libquery_engine-debian-openssl-3.0.x.so.node node dist/index.js'",
+    "build": "npx prisma generate --schema=../../packages/db/prisma/schema.prisma && npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js && cp -r ../../packages/db/node_modules/.prisma/client dist/",
+    "start": "dotenv -e ../../packages/db/.env -- node dist/index.js",
     "dev": "npm run build && npm run start"
   },
   "keywords": [],

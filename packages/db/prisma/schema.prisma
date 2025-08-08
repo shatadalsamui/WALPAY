@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  output        = "../node_modules/.prisma/client"
+  output        = "../node_modules/@prisma/client"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -86,4 +86,15 @@ enum OnRampStatus {
   Success
   Failure
   Processing
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  phone     String
+  password  String
+  otp       String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }

@@ -7,7 +7,7 @@ export function AppbarClient() {
   const session = useSession();
   const pathname = usePathname();
 
-  const isAuthPage = pathname?.includes('signin') || pathname?.includes('signup') || pathname?.includes('error');
+  const isAuthPage = pathname?.includes('signin') || pathname?.includes('signup') || pathname?.includes('error') || pathname?.includes('otp');
 
   return (
     <div>

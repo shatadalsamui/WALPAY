@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
       "build": "tsc",
-      "dev": "tsc --watch"
+      "dev": "tsc --watch & echo 'TypeScript compiler is running in watch mode.'"
     },
     "dependencies": {
       "recoil": "^0.7.7"

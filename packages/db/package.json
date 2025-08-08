@@ -10,7 +10,10 @@
     "exports": {
         "./client": "./index.ts"
     },
+    "scripts": {
+        "build": "prisma generate"
+    },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
     }
-  }
+}
