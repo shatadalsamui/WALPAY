@@ -10,6 +10,7 @@ import { z } from "zod";
 const addMoneySchema = z.object({
     amount: z.number()
         .min(500, "Minimum amount is ₹500")
+        .max(100000, "Maximum amount is ₹1,00,000")
         .positive("Amount must be positive"),
     provider: z.string().min(1, "Please select a bank")
 });
@@ -38,13 +39,13 @@ export const AddMoney = () => {
     const handleAddMoney = async () => {
         try {
             const validationResult = addMoneySchema.safeParse({ amount, provider });
-            
+
             if (!validationResult.success) {
                 const firstError = validationResult.error.issues[0];
                 setMessage({ text: firstError?.message || "Invalid data", type: 'error' });
                 return;
             }
-            
+
             setIsLoading(true);
             setMessage(null);
             await createOnRampTransaction(amount, provider);
@@ -61,7 +62,7 @@ export const AddMoney = () => {
             <TextInput label="Amount" placeholder="Amount" onChange={(value) => {
                 setAmount(Number(value))
             }} />
-            
+
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">Bank</label>
                 <Select onSelect={(value) => {
@@ -72,13 +73,13 @@ export const AddMoney = () => {
                     value: x.name
                 }))} />
             </div>
-            
+
             {message && (
                 <div className={`p-3 rounded-md ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                     {message.text}
                 </div>
             )}
-            
+
             <div className="flex justify-center pt-2">
                 <Button onClick={handleAddMoney} disabled={isLoading}>
                     {isLoading ? "Processing..." : "Add"}

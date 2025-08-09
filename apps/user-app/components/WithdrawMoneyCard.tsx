@@ -10,6 +10,7 @@ import { z } from "zod";
 const withdrawalSchema = z.object({
     amount: z.number()
         .min(100, "Minimum withdrawal is ₹100")
+        .max(100000, "Maximum withdrawal is ₹1,00,000")
         .positive("Amount must be positive"),
     accountNumber: z.string()
         .min(9, "Account number must be at least 9 digits")
@@ -62,7 +63,7 @@ export const WithdrawMoney = () => {
 
             const response = await createWithdrawal({
                 amount: validationResult.data.amount,
-            bank: validationResult.data.bank,
+                bank: validationResult.data.bank,
                 accountNumber: cleanAccountNumber
             });
 
