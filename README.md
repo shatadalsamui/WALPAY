@@ -1,4 +1,3 @@
- 
 # WALPAY
 
 WalPay is a modern, wallet-based payment platform designed for seamless transactions between users and merchants. Built as a monorepo using Turborepo, it leverages Next.js, Prisma, and a modular package structure for scalability and maintainability.
@@ -51,26 +50,30 @@ Here's how the code is organized:
 ```
 
 ## Prerequisites
+
 - Node.js v16+
 - PostgreSQL
 - Docker (optional)
 
 ## Setup Instructions
 
-1. **Clone repository**
+**Clone repository**
+
 ```bash
 git clone git@github.com:shatadalsamui/WALPAY-NEW.git
 cd WALPAY-NEW
 ```
 
-2. **Install dependencies**
+**Install dependencies**
+
 ```bash
 npm install
 ```
 
-3. **Database Setup** (Choose one option)
+**Database Setup (Choose one option)**
 
-**Option A: Local PostgreSQL with Docker**
+*Option A: Local PostgreSQL with Docker*
+
 ```bash
 docker run -d \
    --name walpay_postgres \
@@ -82,24 +85,27 @@ docker run -d \
    postgres:latest
 ```
 
-**Option B: Cloud PostgreSQL (e.g., Neon.tech)**
+*Option B: Cloud PostgreSQL (e.g., Neon.tech)*
 - Create account and database
 - Get connection string
 
-4. **Environment Configuration**
+**Environment Configuration**
+
 ```bash
 cp .env.example .env
 # Update .env with your database credentials
 ```
 
-5. **Database Migrations**
+**Database Migrations**
+
 ```bash
 cd packages/db
 npx prisma migrate dev
 npx prisma db seed
 ```
 
-6. **Run Application**
+**Run Application**
+
 ```bash
 cd apps/user-app
 npm run dev
@@ -107,48 +113,33 @@ npm run dev
 
 ## CI/CD Workflow
 
-The project includes GitHub Actions for continuous integration:
+- **Build on PR:** Runs `npm run build` on every pull request to `main`
+- **Verifies**: Project builds successfully, runs in Ubuntu with Node.js 20
+- **Location**: `.github/workflows/build.yml`
+- **Branch Strategy**:  
+  - `main`: Production-ready code (protected)  
+  - `development`: Active development
+- **Pre-Merge Validation**:  
+  - Triggers on PR creation/update  
+  - Runs tests, build, code quality checks  
+  - Required for merge approval
+- **Production Deployment**:  
+  - Triggers on merge to `main`  
+  - Builds Docker image, pushes to Docker Hub, verifies deployment
 
-- **Build on PR**: Automatically runs `npm run build` on every pull request to `main` branch
-  - Verifies the project builds successfully
-  - Runs in Ubuntu environment with Node.js 20
-  - Located in `.github/workflows/build.yml`
-
-Our automated deployment pipeline ensures safe and reliable releases:
-
-### Branch Strategy
-- `main`: Production-ready code (protected branch)
-- `development`: Active development branch
-
-### Workflow Automation
-
-1. **Pre-Merge Validation** (build.yml)
-   - Triggers on PR creation/update
-   - Runs:
-     - Test suite
-     - Build verification
-     - Code quality checks
-   - Required for merge approval
-
-2. **Production Deployment** (deploy.yml)
-   - Triggers when code merges to `main`
-   - Automated steps:
-     - Docker image build
-     - Push to Docker Hub
-     - Deployment verification
-
-### Manual Steps
+**Manual Steps**
 - PR reviews required before merging to `main`
 - Version tagging triggers production deployments
 
-To manually trigger the workflow:
-1. Create a pull request to `main` branch
-2. The build will run automatically
-3. Check the "Actions" tab in GitHub for results
+**To manually trigger the workflow:**
+- Create a pull request to `main`
+- The build will run automatically
+- Check the "Actions" tab in GitHub for results
 
 ## Docker Support
 
-### userapp-walpay Container
+**userapp-walpay Container**
+
 ```bash
 # Build the container
 docker build -t userapp-walpay -f docker/dockerfile.user .
@@ -157,12 +148,12 @@ docker build -t userapp-walpay -f docker/dockerfile.user .
 docker run userapp-walpay
 ```
 
-### Configuration
 - Uses Node.js 20.x
 - Includes auto DB migration
 
 ## Authentication System
 
+<<<<<<< HEAD
 WalPay supports multiple authentication methods:
 
 1. **Phone/Email + Password**
@@ -179,14 +170,28 @@ WalPay supports multiple authentication methods:
 - **Transactions**: View all transfers, deposits, and withdrawals in one place
 - **Secure Authentication**: Dual validation for signin/signup flows
 - **Balance Management**: Track and manage wallet balance with locked amount support
+=======
+- Phone/Email + Password
+- Secure signin/signup with phone number and password
+- Email is verified with OTP only during signup
+- Password requirements: 8+ chars, uppercase, lowercase, special char
+- Phone number validation (10 digits)
+
+## Key Features
+
+- Deposit to Wallet from Bank: Instantly add funds to your wallet via bank transfer
+- Withdrawal from Wallet to Bank: Withdraw funds from your wallet directly to your bank account
+- P2P Transfer: Send money to other users via phone number
+- Transactions: View all transfers, deposits, and withdrawals in one place
+- Secure Authentication: Dual validation for signin/signup flows
+- Balance Management: Track and manage wallet balance with locked amount support
+>>>>>>> 6f868d1 (Updated Readme)
 
 ## Bank Integration
 
-### 1. Deposit Webhook
-
-**Endpoint**: `POST /hdfcWebhook`
-
-**Request Format**:
+**1. Deposit Webhook**  
+Endpoint: `POST /hdfcWebhook`  
+Request Format:
 ```json
 {
     "token": "970.4572088875194",
@@ -195,11 +200,9 @@ WalPay supports multiple authentication methods:
 }
 ```
 
-### 2. Withdrawal Webhook
-
-**Endpoint**: `POST /hdfcWithdrawalWebhook`
-
-**Request Format**:
+**2. Withdrawal Webhook**  
+Endpoint: `POST /hdfcWithdrawalWebhook`  
+Request Format:
 ```json
 {
     "token": "wth_f745c384-b095-421b-afd5-e29103486338",
@@ -208,27 +211,22 @@ WalPay supports multiple authentication methods:
     "amount": 10000
 }
 ```
+- Status Values:  
+  - `SUCCESS`: Withdrawal processed successfully  
+  - `FAILED`: Withdrawal failed (include failureReason)
+- Amount: Always in paisa (e.g., 10000 = ₹100.00)
 
-**Status Values**:
-- `SUCCESS`: Withdrawal processed successfully
-- `FAILED`: Withdrawal failed (include `failureReason`)
+## Testing with Postman
 
-**Amount**: Always in paisa (e.g., 10000 = ₹100.00)
+**Test Deposit Webhook:**
+- POST: `http://localhost:3003/hdfcWebhook`
+- Headers: `Content-Type: application/json`
+- Send test payload
 
-### Testing with Postman
-
-#### Test Deposit Webhook:
-1. Create POST request to: `http://localhost:3003/hdfcWebhook`
-2. Set Headers:
-   - `Content-Type: application/json`
-3. Send test payload
-
-#### Test Withdrawal Webhook:
-1. Create POST request to: `http://localhost:3003/hdfcWithdrawalWebhook`
-2. Set Headers:
-   - `Content-Type: application/json`
-   - `x-webhook-secret: your_webhook_secret_here`
-3. Send test payload
+**Test Withdrawal Webhook:**
+- POST: `http://localhost:3003/hdfcWithdrawalWebhook`
+- Headers: `Content-Type: application/json`, `x-webhook-secret: your_webhook_secret_here`
+- Send test payload
 
 ## Withdrawal Flow
 
@@ -236,19 +234,18 @@ WalPay supports multiple authentication methods:
    - User initiates withdrawal with amount and bank details
    - System generates unique withdrawal token
    - Amount is locked in user's balance
-
 2. **Bank Processing**
    - Bank processes the withdrawal request
    - Sends webhook notification with status
-
 3. **Status Updates**
    - On SUCCESS: Locked amount is deducted
    - On FAILED: Locked amount is returned to available balance
 
-### Development Scripts
+## Development Scripts
+
 - `npm test` - Run tests
 - `npm run build` - Build production version
 - `npm run dev` - Run in development mode
 - `npm run lint` - Run linter
- 
- 
+
+
