@@ -9,8 +9,8 @@ import { z } from "zod";
 
 const addMoneySchema = z.object({
     amount: z.number()
-        .min(500, "Minimum amount is ₹500")
-        .max(100000, "Maximum amount is ₹1,00,000")
+        .min(500, "Minimum Deposit amount is ₹500 !")
+        .max(100000, "Maximum Deposit amount is ₹1,00,000 !")
         .positive("Amount must be positive"),
     provider: z.string().min(1, "Please select a bank")
 });
@@ -50,8 +50,8 @@ export const AddMoney = () => {
             setMessage(null);
             await createOnRampTransaction(amount, provider);
             window.location.href = redirectUrl || "";
-        } catch (error) {
-            setMessage({ text: "An error occurred", type: 'error' });
+        } catch (error: any) {
+            setMessage({ text: error?.message || "An error occurred", type: 'error' });
         } finally {
             setIsLoading(false);
         }

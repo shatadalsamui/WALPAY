@@ -4,6 +4,8 @@ import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
 import { z } from "zod";
 
+const MAX_BALANCE = 10000000;// 1 lakh in paisa
+
 //Input Validation Schema
 const transferSchema = z.object({
     to: z.string()
@@ -59,6 +61,13 @@ export async function p2pTransfer(to: string, amount: number) {
         });
         if (!fromBalance || fromBalance.amount < amount) {
             throw new Error('Insufficient funds');
+        }
+        const recipentBalance = await tx.balance.findUnique({
+            where: { userId: toUser.id }
+        });
+
+        if (recipentBalance && (recipentBalance.amount + amount > MAX_BALANCE)) {
+            throw new Error("Recipient cannot recieve money! Contact the recipient.")
         }
 
         await tx.balance.update({
