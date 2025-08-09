@@ -2,7 +2,7 @@
 import { useState, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Form } from "../../../components/otpForm";
+import { Form } from "../../../components/OtpForm";
 import { Center } from "@repo/ui/center";
 import { z } from "zod";
 

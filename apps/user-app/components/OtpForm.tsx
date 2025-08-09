@@ -2,6 +2,7 @@
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
+import { useRouter } from "next/navigation";
 
 interface FormProps {
     title: string;
@@ -19,6 +20,7 @@ interface FormProps {
 }
 
 export function Form({ title, buttonText, onSubmit, inputs, error, loading }: FormProps) {
+    const router = useRouter();
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit();
@@ -49,6 +51,16 @@ export function Form({ title, buttonText, onSubmit, inputs, error, loading }: Fo
                     </Button>
                 </div>
             </form>
+            <div className="text-center mt-4">
+                <span style={{ color: 'black' }}>Didn&apos;t receive OTP? </span>
+                <button
+                    type="button"
+                    className="text-blue-600 cursor-pointer bg-transparent pl-1"
+                    onClick={() => router.push("/signup")}
+                >
+                    Retry
+                </button>
+            </div>
         </Card>
     );
 }
