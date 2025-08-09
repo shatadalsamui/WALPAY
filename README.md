@@ -153,24 +153,8 @@ docker run userapp-walpay
 
 ## Authentication System
 
-<<<<<<< HEAD
 WalPay supports multiple authentication methods:
 
-1. **Phone/Email + Password**
-   - Secure signin/signup with phone number and password
-   - Email is verified with OTP only during signup
-   - Password requirements: 8+ chars, uppercase, lowercase, special char
-   - Phone number validation (10 digits)
-
-## Key Features
-
-- **Deposit to Wallet from Bank**: Instantly add funds to your wallet via bank transfer
-- **Withdrawal from Wallet to Bank**: Withdraw funds from your wallet directly to your bank account
-- **P2P Transfer**: Send money to other users via phone number
-- **Transactions**: View all transfers, deposits, and withdrawals in one place
-- **Secure Authentication**: Dual validation for signin/signup flows
-- **Balance Management**: Track and manage wallet balance with locked amount support
-=======
 - Phone/Email + Password
 - Secure signin/signup with phone number and password
 - Email is verified with OTP only during signup
@@ -185,7 +169,6 @@ WalPay supports multiple authentication methods:
 - Transactions: View all transfers, deposits, and withdrawals in one place
 - Secure Authentication: Dual validation for signin/signup flows
 - Balance Management: Track and manage wallet balance with locked amount support
->>>>>>> 6f868d1 (Updated Readme)
 
 ## Bank Integration
 
