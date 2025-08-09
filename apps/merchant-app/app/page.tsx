@@ -2,14 +2,11 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 flex flex-col">
+  <div className="min-h-screen bg-gradient-to-br from-gray-200 via-blue-100 to-blue-200 flex flex-col">
       {/* Top Bar (SSR, no client code) */}
-      <header className="flex items-center justify-between px-8 py-6 shadow bg-white/80 backdrop-blur-md">
+  <header className="flex items-center justify-between px-8 py-6 shadow bg-transparent backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-10">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-          </svg>
-          <div className="text-4xl text-[#333333] font-bold">WALPAY</div>
+          <div className="text-4xl text-blue-800 font-bold italic">WALPAY</div>
         </div>
         <div className="flex gap-4">
           <Link href="http://localhost:3001/signup" className="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Sign Up</Link>

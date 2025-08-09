@@ -16,10 +16,7 @@ export const Appbar = ({
     return <div className="flex justify-between border-b px-4 border-slate-300 h-16 items-center">
 
         <div className="flex items-center gap-2">
-            <WALPAYIcon />
-            <div className="text-4xl text-[#333333] font-bold">
-                WALPAY
-            </div>
+            <div className="text-4xl text-blue-800 font-bold italic">WALPAY</div>
         </div>
         {(onSignin || onSignout) && (
             <div className="flex flex-col justify-center pt-2">
