@@ -49,28 +49,31 @@ export default function VerifyOtpPage() {
         <div className="flex justify-center items-center min-h-screen">
             <div className="w-full max-w-lg mt-[-250px]">
                 <Card title="Verify OTP">
-                    {error && <div className="mb-4 p-4 bg-red-100 text-red-700 rounded max-w-md mx-auto text-center">{error}</div>}
-                    {success && <div className="mb-4 p-4 bg-green-100 text-green-700 rounded max-w-md mx-auto text-center">{success}</div>}
-                    <div className="space-y-10"> 
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                handleSubmit();
-                            }}
-                            className="space-y-6" 
-                        >
-                            <TextInput
-                                label="Enter OTP"
-                                type="text"
-                                placeholder="Enter the OTP sent to your email"
-                                value={otp}
-                                onChange={(value: string) => setOtp(value)}
-                            />
-                            <Button onClick={handleSubmit} disabled={loading}>
-                                {loading ? "Verifying..." : "Verify OTP"}
-                            </Button>
-                        </form>
-                    </div>
+                    {/* Add a subtle gap above and below the message if present */}
+                    {(error || success) && (
+                        <div className="pt-3 pb-3">
+                            {error && <div className="p-4 bg-red-100 text-red-700 rounded max-w-md mx-auto text-center">{error}</div>}
+                            {success && <div className="p-4 bg-green-100 text-green-700 rounded max-w-md mx-auto text-center">{success}</div>}
+                        </div>
+                    )}
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                        }}
+                        className="space-y-6 pt-0"
+                    >
+                        <TextInput
+                            label="Enter OTP"
+                            type="text"
+                            placeholder="Enter the OTP sent to your email"
+                            value={otp}
+                            onChange={(value: string) => setOtp(value)}
+                        />
+                        <Button onClick={handleSubmit} disabled={loading}>
+                            {loading ? "Verifying..." : "Verify OTP"}
+                        </Button>
+                    </form>
                 </Card>
             </div>
         </div>

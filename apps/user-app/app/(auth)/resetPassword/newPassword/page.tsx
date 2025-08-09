@@ -56,8 +56,12 @@ export default function NewPasswordPage() {
         <div className="flex justify-center items-center min-h-screen">
             <div className="w-full max-w-lg mt-[-250px]">
                 <Card title="Set New Password">
-                    {error && <div className="mb-4 p-4 bg-red-100 text-red-700 rounded max-w-md mx-auto text-center">{error}</div>}
-                    {success && <div className="mb-4 p-4 bg-green-100 text-green-700 rounded max-w-md mx-auto text-center">{success}</div>}
+                    {(error || success) && (
+                        <div className="pt-3 pb-3">
+                            {error && <div className="p-4 bg-red-100 text-red-700 rounded max-w-md mx-auto text-center">{error}</div>}
+                            {success && <div className="p-4 bg-green-100 text-green-700 rounded max-w-md mx-auto text-center">{success}</div>}
+                        </div>
+                    )}
                     <div className="space-y-4"> 
                         <form
                             onSubmit={(e) => {
