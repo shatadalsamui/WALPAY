@@ -1,7 +1,6 @@
 import { Center } from "@repo/ui/center"
 import { AuthForm } from "../../../components/AuthForm"
 
-
 export default function SignupPage() {
   return (<div>
     <Center>

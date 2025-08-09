@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 
 import { useBalance } from "@repo/store/balance";
 

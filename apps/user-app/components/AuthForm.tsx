@@ -6,7 +6,6 @@ import { Button } from "@repo/ui/button"
 import { TextInput } from "@repo/ui/textinput"
 import { Card } from "@repo/ui/card"
 
-
 //Input validations
 const validatePhone = (phone: string) =>
   /^\d{10}$/.test(phone);
@@ -181,11 +180,19 @@ export function AuthForm({ mode = 'signin' }: AuthFormProps) {
             {showPassword ? 'Hide' : 'Show'}
           </button>
         </div>
-        <div className="pt-4">
+        <div className="pt-4 flex flex-col gap-2">
           <Button onClick={handleButtonClick}>
             {loading ? 'Processing...' : mode === 'signup' ? 'Sign Up' : 'Sign In'}
           </Button>
         </div>
+        {mode === 'signin' && (
+          <a
+            href="/resetPassword/verifyEmail"
+            className="block text-blue-600 hover:text-blue-800 text-sm font-medium text-center"
+          >
+            Forgot password?
+          </a>
+        )}
       </form>
       <div className="mt-4 text-center text-sm">
         {mode === 'signin' ? (
