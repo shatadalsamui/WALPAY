@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
@@ -61,10 +62,12 @@ export default function NewPasswordPage() {
 
             if (!response.ok) {
                 setError(data.error || "Failed to update password. Please try again.");
-            } else {
-                setSuccess("Password updated successfully! Redirecting...");
-                setTimeout(() => router.push("/signin"), 2000);
-            }
+                        } else {
+                                setSuccess("Password updated successfully! Redirecting...");
+                                setTimeout(() => {
+                                    signOut({ callbackUrl: "/signin" });
+                                }, 2000);
+                        }
         } catch (err) {
             setError("An unexpected error occurred. Please try again.");
         } finally {
