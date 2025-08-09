@@ -6,7 +6,7 @@ WalPay is a modern, wallet-based payment platform designed for seamless transact
 
 Here's how the code is organized:
 
-```
+```text
 .
 ├── apps/
 │   ├── user-app/                  # Customer-facing Next.js application
@@ -57,22 +57,22 @@ Here's how the code is organized:
 
 ## Setup Instructions
 
-**Clone repository**
+### Clone repository
 
 ```bash
 git clone git@github.com:shatadalsamui/WALPAY-NEW.git
 cd WALPAY-NEW
 ```
 
-**Install dependencies**
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-**Database Setup (Choose one option)**
+### Database Setup (Choose one option)
 
-*Option A: Local PostgreSQL with Docker*
+#### Option A: Local PostgreSQL with Docker
 
 ```bash
 docker run -d \
@@ -85,18 +85,19 @@ docker run -d \
    postgres:latest
 ```
 
-*Option B: Cloud PostgreSQL (e.g., Neon.tech)*
+#### Option B: Cloud PostgreSQL (e.g., Neon.tech)
+
 - Create account and database
 - Get connection string
 
-**Environment Configuration**
+### Environment Configuration
 
 ```bash
 cp .env.example .env
 # Update .env with your database credentials
 ```
 
-**Database Migrations**
+### Database Migrations
 
 ```bash
 cd packages/db
@@ -104,7 +105,7 @@ npx prisma migrate dev
 npx prisma db seed
 ```
 
-**Run Application**
+### Run Application
 
 ```bash
 cd apps/user-app
@@ -113,32 +114,34 @@ npm run dev
 
 ## CI/CD Workflow
 
-- **Build on PR:** Runs `npm run build` on every pull request to `main`
-- **Verifies**: Project builds successfully, runs in Ubuntu with Node.js 20
-- **Location**: `.github/workflows/build.yml`
-- **Branch Strategy**:  
-  - `main`: Production-ready code (protected)  
+- **Build on PR:** Runs `npm run build` on every pull request to main
+- **Verifies:** Project builds successfully, runs in Ubuntu with Node.js 20
+- **Location:** `.github/workflows/build.yml`
+- **Branch Strategy:**
+  - `main`: Production-ready code (protected)
   - `development`: Active development
-- **Pre-Merge Validation**:  
-  - Triggers on PR creation/update  
-  - Runs tests, build, code quality checks  
+- **Pre-Merge Validation:**
+  - Triggers on PR creation/update
+  - Runs tests, build, code quality checks
   - Required for merge approval
-- **Production Deployment**:  
-  - Triggers on merge to `main`  
+- **Production Deployment:**
+  - Triggers on merge to main
   - Builds Docker image, pushes to Docker Hub, verifies deployment
 
-**Manual Steps**
-- PR reviews required before merging to `main`
+### Manual Steps
+
+- PR reviews required before merging to main
 - Version tagging triggers production deployments
 
 **To manually trigger the workflow:**
-- Create a pull request to `main`
+
+- Create a pull request to main
 - The build will run automatically
 - Check the "Actions" tab in GitHub for results
 
 ## Docker Support
 
-**userapp-walpay Container**
+### userapp-walpay Container
 
 ```bash
 # Build the container
@@ -172,9 +175,12 @@ WalPay supports multiple authentication methods:
 
 ## Bank Integration
 
-**1. Deposit Webhook**  
-Endpoint: `POST /hdfcWebhook`  
+### 1. Deposit Webhook
+
+Endpoint: `POST /hdfcWebhook`
+
 Request Format:
+
 ```json
 {
     "token": "970.4572088875194",
@@ -183,9 +189,12 @@ Request Format:
 }
 ```
 
-**2. Withdrawal Webhook**  
-Endpoint: `POST /hdfcWithdrawalWebhook`  
+### 2. Withdrawal Webhook
+
+Endpoint: `POST /hdfcWithdrawalWebhook`
+
 Request Format:
+
 ```json
 {
     "token": "wth_f745c384-b095-421b-afd5-e29103486338",
@@ -194,19 +203,22 @@ Request Format:
     "amount": 10000
 }
 ```
-- Status Values:  
-  - `SUCCESS`: Withdrawal processed successfully  
+
+- **Status Values:**
+  - `SUCCESS`: Withdrawal processed successfully
   - `FAILED`: Withdrawal failed (include failureReason)
-- Amount: Always in paisa (e.g., 10000 = ₹100.00)
+- **Amount:** Always in paisa (e.g., 10000 = ₹100.00)
 
 ## Testing with Postman
 
 **Test Deposit Webhook:**
+
 - POST: `http://localhost:3003/hdfcWebhook`
 - Headers: `Content-Type: application/json`
 - Send test payload
 
 **Test Withdrawal Webhook:**
+
 - POST: `http://localhost:3003/hdfcWithdrawalWebhook`
 - Headers: `Content-Type: application/json`, `x-webhook-secret: your_webhook_secret_here`
 - Send test payload
@@ -230,5 +242,3 @@ Request Format:
 - `npm run build` - Build production version
 - `npm run dev` - Run in development mode
 - `npm run lint` - Run linter
-
-
