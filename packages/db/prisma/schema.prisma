@@ -98,3 +98,11 @@ model Otp {
   createdAt DateTime @default(now())
   expiresAt DateTime
 }
+
+model PasswordResetOtp {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  otp         String
+  expiresAt   DateTime
+  otpVerified Boolean  @default(false)
+}
