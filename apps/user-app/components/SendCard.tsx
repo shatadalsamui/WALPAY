@@ -2,7 +2,6 @@
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
-import { Center } from "@repo/ui/center";
 import { useState } from "react";
 import { p2pTransfer } from "../app/lib/actions/p2pTransfer";
 import { z } from "zod";
@@ -60,42 +59,31 @@ export function SendCard() {
     };
 
     return (
-        <div>
-            <Center>
-                <Card title="Send to Phone Number">
-                    <div className="min-w-[46.5rem] pt-2">
-                        {message && (
-                            <div className={`mb-4 p-2 rounded text-sm ${message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                {message.text}
-                            </div>
-                        )}
-
-                        <div className="pb-2">
-                            <TextInput
-                                placeholder="Number"
-                                label="Number"
-                                onChange={setNumber}
-                                value={number}
-                            />
-                        </div>
-
-                        <div className="pb-2">
-                            <TextInput
-                                placeholder="Amount"
-                                label="Amount"
-                                onChange={setAmount}
-                                value={amount}
-                            />
-                        </div>
-
-                        <div className="pt-4 flex justify-center">
-                            <Button onClick={handleSubmit} disabled={isLoading}>
-                                {isLoading ? 'Processing...' : 'Send'}
-                            </Button>
-                        </div>
+        <Card title="Send to Phone Number">
+            <div className="w-full space-y-4">
+                <TextInput
+                    label="Number"
+                    placeholder="Enter 10-digit phone number"
+                    value={number}
+                    onChange={setNumber}
+                />
+                <TextInput
+                    label="Amount"
+                    placeholder="Enter amount"
+                    value={amount}
+                    onChange={setAmount}
+                />
+                {message && (
+                    <div className={`p-3 rounded-md ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {message.text}
                     </div>
-                </Card>
-            </Center>
-        </div>
+                )}
+                <div className="flex justify-center pt-2">
+                    <Button onClick={handleSubmit} disabled={isLoading}>
+                        {isLoading ? 'Processing...' : 'Send'}
+                    </Button>
+                </div>
+            </div>
+        </Card>
     );
 }

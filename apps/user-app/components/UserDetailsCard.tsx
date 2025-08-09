@@ -1,5 +1,4 @@
 import { Card } from "@repo/ui/card";
-
 type UserDetailsCardProps = {
   name: string;
   email: string;

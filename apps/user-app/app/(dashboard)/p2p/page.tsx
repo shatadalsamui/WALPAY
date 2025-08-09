@@ -65,9 +65,9 @@ export default async function P2PPage() {
                 P2P Transfer
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
-                <div className="flex flex-col gap-4">
+                <div>
                     <SendCard />
-                    <div className="pt-1">
+                    <div className="pt-4">
                         <BalanceCard amount={balance.amount} locked={balance.locked} />
                     </div>
                 </div>
