@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
+import { z } from "zod";
+
+const emailSchema = z.string().email({ message: "Please enter a valid email address." });
 
 export default function VerifyEmailPage() {
     const [email, setEmail] = useState<string>("");
@@ -17,6 +20,15 @@ export default function VerifyEmailPage() {
         setLoading(true);
         setError("");
         setSuccess("");
+
+        // Zod validation
+        const result = emailSchema.safeParse(email);
+        if (!result.success) {
+            const firstIssue = result.error.issues && result.error.issues[0];
+            setError(firstIssue ? firstIssue.message : "Invalid email");
+            setLoading(false);
+            return;
+        }
 
         try {
             const response = await fetch("/api/resetPassword", {

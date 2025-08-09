@@ -5,6 +5,15 @@ import { useRouter } from "next/navigation";
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
+import { z } from "zod";
+
+const passwordSchema = z.string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .max(20, { message: "Password must be at most 20 characters" })
+    .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
+    .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
+    .regex(/[0-9]/, { message: "Password must contain at least one number" })
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" });
 
 export default function NewPasswordPage() {
     const [password, setPassword] = useState<string>("");
@@ -18,6 +27,15 @@ export default function NewPasswordPage() {
         setLoading(true);
         setError("");
         setSuccess("");
+
+        // Zod validation for password
+        const result = passwordSchema.safeParse(password);
+        if (!result.success) {
+            const firstIssue = result.error.issues && result.error.issues[0];
+            setError(firstIssue ? firstIssue.message : "Invalid password");
+            setLoading(false);
+            return;
+        }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match.");
@@ -62,7 +80,7 @@ export default function NewPasswordPage() {
                             {success && <div className="p-4 bg-green-100 text-green-700 rounded max-w-md mx-auto text-center">{success}</div>}
                         </div>
                     )}
-                    <div className="space-y-4"> 
+                    <div className="space-y-4">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();

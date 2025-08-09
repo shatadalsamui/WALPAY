@@ -6,6 +6,9 @@ import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
 
+import { z } from "zod";
+const otpSchema = z.string().length(6, "OTP must be exactly 6 digits !");
+
 export default function VerifyOtpPage() {
     const [otp, setOtp] = useState<string>("");
     const [loading, setLoading] = useState(false);
@@ -17,6 +20,15 @@ export default function VerifyOtpPage() {
         setLoading(true);
         setError("");
         setSuccess("");
+
+        // Zod validation for OTP
+        const result = otpSchema.safeParse(otp);
+        if (!result.success) {
+            const firstIssue = result.error.issues && result.error.issues[0];
+            setError(firstIssue ? firstIssue.message : "Invalid OTP");
+            setLoading(false);
+            return;
+        }
 
         // Get email from localStorage
         const email = localStorage.getItem("resetEmail") || "";
@@ -33,7 +45,11 @@ export default function VerifyOtpPage() {
             const data = await response.json();
 
             if (!response.ok) {
-                setError(data.error ? JSON.stringify(data.error) : "Failed to verify OTP. Please try again.");
+                let errMsg = data.error;
+                if (typeof errMsg === "string" && errMsg.startsWith('"') && errMsg.endsWith('"')) {
+                    errMsg = errMsg.slice(1, -1);
+                }
+                setError(errMsg || "Failed to verify OTP. Please try again.");
             } else {
                 setSuccess("OTP verified successfully! Redirecting...");
                 setTimeout(() => router.push("/resetPassword/newPassword"), 2000);
@@ -49,7 +65,6 @@ export default function VerifyOtpPage() {
         <div className="flex justify-center items-center min-h-screen">
             <div className="w-full max-w-lg mt-[-250px]">
                 <Card title="Verify OTP">
-                    {/* Add a subtle gap above and below the message if present */}
                     {(error || success) && (
                         <div className="pt-3 pb-3">
                             {error && <div className="p-4 bg-red-100 text-red-700 rounded max-w-md mx-auto text-center">{error}</div>}
