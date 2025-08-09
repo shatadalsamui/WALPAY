@@ -80,10 +80,11 @@ export default function VerifyOtpPage() {
                     >
                         <TextInput
                             label="Enter OTP"
-                            type="text"
+                            type="password"
                             placeholder="Enter the OTP sent to your email"
                             value={otp}
                             onChange={(value: string) => setOtp(value)}
+                            showEye={true}
                         />
                         <Button onClick={handleSubmit} disabled={loading}>
                             {loading ? "Verifying..." : "Verify OTP"}

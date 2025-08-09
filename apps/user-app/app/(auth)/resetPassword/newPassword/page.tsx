@@ -21,6 +21,8 @@ export default function NewPasswordPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async () => {
@@ -94,6 +96,7 @@ export default function NewPasswordPage() {
                                 placeholder="Enter your new password"
                                 value={password}
                                 onChange={(value: string) => setPassword(value)}
+                                showEye={true}
                             />
                             <TextInput
                                 label="Confirm Password"
@@ -101,6 +104,7 @@ export default function NewPasswordPage() {
                                 placeholder="Confirm your new password"
                                 value={confirmPassword}
                                 onChange={(value: string) => setConfirmPassword(value)}
+                                showEye={true}
                             />
                             <Button onClick={handleSubmit} disabled={loading}>
                                 {loading ? "Updating..." : "Update Password"}
