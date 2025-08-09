@@ -11,48 +11,43 @@ Here's how the code is organized:
 .
 ├── apps/
 │   ├── user-app/                  # Customer-facing Next.js application
-│   │   ├── app/                   # App router directory
-│   │   │   ├── (auth)/            # Authentication pages
-│   │   │   ├── (dashboard)/       # User dashboard
-│   │   │   │   ├── withdraw/      # Withdrawal pages
-│   │   │   │   └── ...
-│   │   │   └── api/               # API routes
-│   │   ├── components/            # UI components
-│   │   │   ├── withdraw/          # Withdrawal components
-│   │   │   └── ...
-│   │   ├── lib/                   # Core business logic
-│   │   │   ├── actions/
-│   │   │   │   ├── createWithdrawal.ts  # Withdrawal creation
-│   │   │   │   └── ...
-│   │   │   └── ...
-│   │   └── ...
-│   │
-│   ├── merchant-app/              # Merchant portal
-│   │   └── lib/auth.ts            # Merchant auth setup
-│   │
-│   └── bank-webhook/              # Bank integration service
-│       ├── src/
-│       │   ├── index.ts           # Webhook handlers
-│       │   └── types.ts           # Type definitions
-│       └── ...
+│   │   ├── app/
+│   │   │   ├── (auth)/            # Authentication pages (error, otp, signin, signup)
+│   │   │   ├── (dashboard)/       # User dashboard (dashboard, p2p, transactions, transfer, withdraw)
+│   │   │   ├── api/               # API routes (auth, signup, user)
+│   │   │   ├── error.tsx, layout.tsx, page.tsx, etc.
+│   │   ├── components/            # UI components (AddMoneyCard, AuthForm, etc.)
+│   │   ├── lib/                   # Business logic (actions, next-auth.d.ts, etc.)
+│   │   ├── public/                # Static assets
+│   │   ├── provider.tsx, tailwind.config.js, etc.
+│   ├── merchant-app/              # Merchant portal (Next.js)
+│   │   ├── app/
+│   │   ├── lib/
+│   │   ├── public/
+│   │   ├── provider.tsx, tailwind.config.js, etc.
+│   ├── bank-webhook/              # Bank integration service
+│   │   ├── src/ (index.ts)
+│   │   ├── package.json, tsconfig.json, etc.
 │
 ├── packages/
 │   ├── db/                        # Database models (Prisma)
-│   │   ├── prisma/
-│   │   │   └── schema.prisma      # Withdrawal model and relations
-│   │   └── ...
-│   │
-│   ├── ui/                        # Shared UI components
-│   │   ├── components/
-│   │   │   ├── withdraw/         # Reusable withdrawal components
-│   │   │   └── ...
-│   │   └── ...
-│   │
-│   └── store/                     # Global state management
-│       └── ...
+│   │   ├── prisma/ (schema.prisma, migrations, seed.ts)
+│   │   ├── index.ts, package.json, etc.
+│   ├── ui/                        # Shared UI components (Appbar, card, button, etc.)
+│   │   ├── src/
+│   │   ├── turbo/generators/
+│   ├── store/                     # Global state management (atoms, hooks)
+│   ├── eslint-config/             # Shared ESLint config
+│   ├── typescript-config/         # Shared TS config
 │
+├── docker/
+│   └── dockerfile.user            # Custom Dockerfile
+├── .github/                       # GitHub workflows
+├── .eslintrc.js, .gitignore, etc.
+├── Dockerfile                     # Main Dockerfile
+├── package.json                   # Root dependencies
 ├── turbo.json                     # Turborepo config
-└── package.json                   # Root dependencies
+├── tsconfig.json                  # Root TS config
 ```
 
 ## Prerequisites
@@ -77,7 +72,14 @@ npm install
 
 **Option A: Local PostgreSQL with Docker**
 ```bash
-docker run -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres
+docker run -d \
+   --name walpay_postgres \
+   -e POSTGRES_USER=walpay_user \
+   -e POSTGRES_PASSWORD=walpay_password \
+   -e POSTGRES_DB=walpay_db \
+   -p 5432:5432 \
+   -v postgres_data:/var/lib/postgresql/data \
+   postgres:latest
 ```
 
 **Option B: Cloud PostgreSQL (e.g., Neon.tech)**
@@ -163,16 +165,18 @@ docker run userapp-walpay
 
 WalPay supports multiple authentication methods:
 
-1. **Phone + Password**
+1. **Phone/Email + Password**
    - Secure signin/signup with phone number and password
+   - Email is verified with OTP only during signup
    - Password requirements: 8+ chars, uppercase, lowercase, special char
    - Phone number validation (10 digits)
 
 ## Key Features
 
-- **P2P Transfers**: Send money to other users via phone number
-- **Bank Withdrawals**: Withdraw funds to bank accounts
-- **Transaction History**: View recent transfers, deposits, and withdrawals
+- **Deposit to Wallet from Bank**: Instantly add funds to your wallet via bank transfer
+- **Withdrawal from Wallet to Bank**: Withdraw funds from your wallet directly to your bank account
+- **P2P Transfer**: Send money to other users via phone number
+- **Transactions**: View all transfers, deposits, and withdrawals in one place
 - **Secure Authentication**: Dual validation for signin/signup flows
 - **Balance Management**: Track and manage wallet balance with locked amount support
 

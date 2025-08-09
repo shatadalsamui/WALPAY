@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import nodemailer from "nodemailer";
-import { redirect } from "next/navigation";
 import { JWT } from "next-auth/jwt";
 import { Session, User } from "next-auth";
 
