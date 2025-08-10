@@ -33,6 +33,21 @@ app.post("/hdfcWebhook", verifyWebhook, async (req, res) => {
     const paymentInformation = req.body as DepositWebhookRequest;
 
     try {
+        // 1. Fetch the transaction by token
+        const txn = await db.onRampTransaction.findUnique({
+            where: { token: paymentInformation.token }
+        });
+
+        if (!txn) {
+            return res.status(404).json({ message: "Transaction not found" });
+        }
+
+        // 2. Check if already successful
+        if (txn.status === "Success") {
+            return res.status(200).json({ message: "Already processed" });
+        }
+
+        // 3. Process the transaction
         await db.$transaction([
             db.balance.updateMany({
                 where: {

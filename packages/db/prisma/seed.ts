@@ -1,4 +1,4 @@
-  import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import bcrypt from "bcrypt";
 const prisma = new PrismaClient()
 
@@ -12,8 +12,8 @@ async function main() {
       name: 'alice',
       Balance: {
         create: {
-            amount: 20000,
-            locked: 0
+          amount: 20000,
+          locked: 0
         }
       },
       OnRampTransaction: {
@@ -36,8 +36,8 @@ async function main() {
       name: 'bob',
       Balance: {
         create: {
-            amount: 2000,
-            locked: 0
+          amount: 2000,
+          locked: 0
         }
       },
       OnRampTransaction: {

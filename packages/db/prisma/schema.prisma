@@ -1,3 +1,6 @@
+// 1. Tells Prisma to generate a type-safe database client for your app.
+// 2. Outputs the generated client to ../node_modules/@prisma/client.
+// 3. Builds binaries for native and debian-openssl-3.0.x environments
 generator client {
   provider      = "prisma-client-js"
   output        = "../node_modules/@prisma/client"
@@ -22,12 +25,6 @@ model User {
   withdrawals       Withdrawal[]
 }
 
-model Merchant {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  auth_type AuthType
-}
 
 model p2pTransfer {
   id         Int      @id @default(autoincrement())
@@ -64,6 +61,7 @@ model Withdrawal {
   updatedAt       DateTime @updatedAt
   user            User     @relation(fields: [userId], references: [id])
 
+  //does indexing, makes queries faster, fetch data from db
   @@index([userId])
   @@index([status])
   @@index([bankReferenceId])

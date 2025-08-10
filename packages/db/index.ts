@@ -1,3 +1,6 @@
+//exports a singleton Prisma client instance ,
+//makes sure that one one prismaclient is created and reused across the project
+//this prevents db connection issues in Nextjs apps 
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
