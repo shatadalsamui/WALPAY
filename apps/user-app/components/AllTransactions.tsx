@@ -32,9 +32,9 @@ type FilterType = 'all' | 'ON_RAMP' | 'P2P' | 'WITHDRAW';
 
 const filters = [
   { id: 'all', label: 'All' },
-  { id: 'ON_RAMP', label: 'Deposit' },
-  { id: 'P2P', label: 'P2P Transfer' },
-  { id: 'WITHDRAW', label: 'Withdraw' }
+  { id: 'ON_RAMP', label: 'Deposits' },
+  { id: 'P2P', label: 'P2P Transfers' },
+  { id: 'WITHDRAW', label: 'Withdrawals' }
 ];
 
 export const AllTransactions = ({
