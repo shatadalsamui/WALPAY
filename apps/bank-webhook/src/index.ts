@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import db from "@repo/db/client";
 const app = express();
 
@@ -20,7 +20,7 @@ interface WithdrawalWebhookRequest {
 }
 
 // Middleware to verify webhook secret
-const verifyWebhook = (req: any, res: any, next: any) => {
+const verifyWebhook = (req: Request, res: Response, next: NextFunction) => {
     const webhookSecret = req.headers['x-webhook-secret'];
     if (webhookSecret !== process.env.WEBHOOK_SECRET) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -48,7 +48,7 @@ app.post("/hdfcWebhook", verifyWebhook, async (req, res) => {
         }
 
         // 3. Process the transaction
-        await db.$transaction([
+        await db.$transaction([//Both updates run in a single atomic transaction—if either fails or the server crashes, neither change is saved.it gets rolled back!
             db.balance.updateMany({
                 where: {
                     userId: Number(paymentInformation.user_identifier)
@@ -86,9 +86,9 @@ app.post("/hdfcWebhook", verifyWebhook, async (req, res) => {
 app.post("/hdfcWithdrawalWebhook", verifyWebhook, async (req, res) => {
     const withdrawalInfo = req.body as WithdrawalWebhookRequest;
 
-    try {
+    try {// all txns are atomic,if any of them fails, all changes are rolled back.
         await db.$transaction(async (tx) => {
-            // 1. Find withdrawal by token with all required fields
+            // Find withdrawal by token with all required fields
             const withdrawal = await tx.withdrawal.findFirst({
                 where: { token: withdrawalInfo.token },
                 select: { 
@@ -103,17 +103,17 @@ app.post("/hdfcWithdrawalWebhook", verifyWebhook, async (req, res) => {
                 throw new Error('Withdrawal not found');
             }
 
-            // 1.1 Check if withdrawal is already processed
+            // Check if withdrawal is already processed
             if (withdrawal.status !== 'PENDING') {
                 throw new Error(`Withdrawal already ${withdrawal.status.toLowerCase()}`);
             }
 
-            // 1.2 Verify amount matches
+            // Verify amount matches
             if (withdrawal.amount !== withdrawalInfo.amount) {
                 throw new Error(`Amount mismatch. Expected: ${withdrawal.amount}, Received: ${withdrawalInfo.amount}`);
             }
 
-            // 2. Update withdrawal status
+            // Update withdrawal status
             await tx.withdrawal.update({
                 where: { id: withdrawal.id },
                 data: {
@@ -123,7 +123,7 @@ app.post("/hdfcWithdrawalWebhook", verifyWebhook, async (req, res) => {
                 }
             });
 
-            // 2. If failed, return locked amount to available balance
+            // If failed, return locked amount to available balance
             if (withdrawalInfo.status === 'FAILED') {
                 await tx.balance.updateMany({
                     where: { userId: withdrawal.userId },
@@ -154,7 +154,7 @@ app.post("/hdfcWithdrawalWebhook", verifyWebhook, async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3003;
+const PORT = 3003;
 app.listen(PORT, () => {
     console.log(`Webhook service listening on port ${PORT}`);
 });

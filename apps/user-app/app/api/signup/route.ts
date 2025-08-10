@@ -23,9 +23,9 @@ const signupSchema = z.object({
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" })
 });
 
-/**
- * Sends an OTP to the user's email address.
- */
+
+// Sends an OTP to the user's email address.
+
 async function sendOtp(email: string, otp: string) {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.error("Email credentials are not set in environment variables.");
@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
         }
 
         const { name, email, phone, password } = parseResult.data;
-
+        
+        //check if any account exists with email or phone
         const existingUser = await db.user.findFirst({ where: { OR: [{ number: phone }, { email }] } });
         if (existingUser) {
             return NextResponse.json({ error: "User with this phone or email already exists." }, { status: 409 });

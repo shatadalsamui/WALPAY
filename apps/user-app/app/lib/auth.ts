@@ -2,13 +2,12 @@ import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { z } from "zod";
-import nodemailer from "nodemailer";
 import { JWT } from "next-auth/jwt";
 import { Session, User } from "next-auth";
 
 // --- ZOD VALIDATION SCHEMAS ---
 
-// Base schema for sign-in, also extended for sign-up.
+// Base schema for sign-in
 const baseSchema = z.object({
     phone: z.string()
         .min(10, { message: "Phone number must be 10 digits" })
@@ -23,7 +22,7 @@ const baseSchema = z.object({
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one special character" })
 });
 
-// Schema for the initial sign-up request.
+// Extended- Schema for the sign-up
 const signupSchema = baseSchema.extend({
     name: z.string()
         .min(2, { message: "Name must be atleast 2 characters" })
@@ -31,31 +30,10 @@ const signupSchema = baseSchema.extend({
     email: z.string().email({ message: "Invalid email address" })
 });
 
-// Schema for the final OTP verification step. OTP is explicitly required.
+// Schema for the final OTP verification step
 const otpVerificationSchema = signupSchema.extend({
     otp: z.string().length(6, "OTP must be 6 digits"),
 });
-
-/**
- * Sends an OTP to the user's email address.
- */
-async function sendOtp(email: string, otp: string) {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.error("Email credentials are not set in environment variables.");
-        throw new Error("Server configuration error: cannot send email.");
-    }
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-    });
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "Your OTP for Walpay",
-        text: `Your One-Time Password (OTP) for Walpay is: ${otp}. It is valid for 10 minutes.`,
-    };
-    await transporter.sendMail(mailOptions);
-}
 
 // --- NEXTAUTH CONFIGURATION ---
 export const authOptions = {
@@ -75,11 +53,11 @@ export const authOptions = {
                 otp: { label: "OTP", type: "text", placeholder: "Enter your OTP" }
             },
             async authorize(credentials: unknown) { // Using unknown for type safety
-                // FLOW 1: OTP VERIFICATION (Final step of signing up)
+                // OTP VERIFICATION (Final step of signing up)
                 const otpParseResult = otpVerificationSchema.safeParse(credentials);
                 if (otpParseResult.success) {
                     const { name, email, phone, password, otp } = otpParseResult.data;
-                    
+
                     const verificationData = await db.otp.findUnique({ where: { email } });
                     if (!verificationData || new Date() > verificationData.expiresAt) {
                         throw new Error("OTP is invalid or has expired. Please sign up again.");
@@ -95,10 +73,11 @@ export const authOptions = {
                     });
                     await db.otp.delete({ where: { email } }); // Clean up used OTP
 
+                    // Return the new user's info to NextAuth to create a session after successful OTP verification and account creation
                     return { id: newUser.id.toString(), name: newUser.name, email: newUser.email, number: newUser.number };
                 }
 
-                // FLOW 3: STANDARD SIGN-IN
+                // STANDARD SIGN-IN
                 const signInParseResult = baseSchema.safeParse(credentials);
                 if (signInParseResult.success) {
                     const { phone, password } = signInParseResult.data;
@@ -109,14 +88,15 @@ export const authOptions = {
                     }
                     throw new Error("Invalid phone number or password.");
                 }
-                
+
                 // If no schema matched, the input was invalid.
                 throw new Error("Invalid input provided. Please check your details.");
             },
         })
     ],
-    secret: process.env.JWT_SECRET || "secret",
+    secret: process.env.JWT_SECRET,
     callbacks: {
+        //The jwt callback customizes what data is stored in the JWT token in the cookie
         async jwt({ token, user }: { token: JWT; user?: User & { number?: string } }) {
             if (user) {
                 token.id = user.id;
@@ -125,6 +105,7 @@ export const authOptions = {
             }
             return token;
         },
+        // customizes what data from the JWT token is exposed to the client-side session object for useSession()
         async session({ session, token }: { session: Session; token: JWT & { number?: string } }) {
             if (token && session.user) {
                 session.user.id = token.id as string;

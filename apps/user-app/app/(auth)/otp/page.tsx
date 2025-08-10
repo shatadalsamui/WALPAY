@@ -1,6 +1,6 @@
 "use client"
 import { useState, Suspense, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Form } from "../../../components/OtpForm";
 import { Center } from "@repo/ui/center";
@@ -48,6 +48,8 @@ function OTPSignInPage() {
 
         const { name, phone, email, password } = signupData;
 
+        // Calls NextAuth inbuilt signIn to trigger OTP verification 
+        // and user creation via the credentials provider in auth.ts
         try {
             const result = await signIn("credentials", {
                 name,

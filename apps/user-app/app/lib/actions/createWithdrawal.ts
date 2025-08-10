@@ -1,5 +1,4 @@
 'use server';
-
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
@@ -74,7 +73,7 @@ export async function createWithdrawal(request: WithdrawRequest) {
             }
         });
 
-        // 3. Lock the amount
+        // 3. Lock the withdrawal amount
         await tx.balance.update({
             where: { userId: Number(userId) },
             data: {
