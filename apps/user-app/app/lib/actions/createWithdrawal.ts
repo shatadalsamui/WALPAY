@@ -48,7 +48,11 @@ export async function createWithdrawal(request: WithdrawRequest) {
     const amountInPaisa = Math.round(request.amount * 100);
 
     // Start a transaction
-    return await prisma.$transaction(async (tx: any) => {
+    return await prisma.$transaction(async (tx) => {
+
+        // Lock the user's balance row to prevent concurrent txns
+        await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(userId)} FOR UPDATE`;
+
         // 1. Verify user has sufficient balance
         const balance = await tx.balance.findUnique({
             where: { userId: Number(userId) }
