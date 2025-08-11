@@ -20,7 +20,7 @@ async function getBalance() {
 
 export default async function P2PPage() {
     const session = await getServerSession(authOptions);
-    const [balance, allTransactions] = await Promise.all([
+    const [balance, allTransactions] = await Promise.all([//lets it run multiple async ops in parallel and gtes resolved only when all get finished
         getBalance(),
         (async () => {
             if (!session?.user?.id) return [];

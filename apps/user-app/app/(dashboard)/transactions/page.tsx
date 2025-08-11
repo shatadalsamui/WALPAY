@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import Loading from "../../../components/Loading";
 
 async function getTransactions(userId: number) {
-  try {
+  try {////lets it run multiple async ops in parallel and gtes resolved only when all get finished
     const [onRampTxns, p2pTxns, withdrawals] = await Promise.all([
       prisma.onRampTransaction.findMany({ where: { userId } }),
       prisma.p2pTransfer.findMany({
@@ -19,6 +19,7 @@ async function getTransactions(userId: number) {
       prisma.withdrawal.findMany({ where: { userId } })
     ]);
 
+    //maps deposits
     const mappedOnRamp = onRampTxns.map(t => ({
       id: t.id,
       amount: t.amount,
@@ -27,7 +28,7 @@ async function getTransactions(userId: number) {
       provider: t.provider,
       status: t.status
     }));
-
+    //maps p2p transfers
     const mappedP2P = p2pTxns.map(t => ({
       id: t.id,
       amount: t.amount,
@@ -38,7 +39,7 @@ async function getTransactions(userId: number) {
       toUser: { number: t.toUser.number, name: t.toUser.name },
       currentUserId: userId
     }));
-
+    //maps withdrawals
     const mappedWithdraw = withdrawals.map(t => ({
       id: t.id,
       amount: t.amount,
