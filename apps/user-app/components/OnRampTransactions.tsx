@@ -24,7 +24,7 @@ export const OnRampTransactions = ({
                 <div className="flex justify-between border-b border-slate-300 py-2">
                     <div>
                         <div className="text-sm">
-                            Received INR
+                            Processed INR
                         </div>
                         <div className="text-slate-600 text-xs">
                             {t.time.toLocaleString('en-IN')}
