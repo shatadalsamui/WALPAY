@@ -7,6 +7,7 @@ import { TextInput } from "@repo/ui/textinput";
 import { createWithdrawal } from "../app/lib/actions/createWithdrawal";
 import { z } from "zod";
 
+//input validation schema for withdrawal
 const withdrawalSchema = z.object({
     amount: z.number()
         .min(100, "Minimum withdrawal is ₹100")

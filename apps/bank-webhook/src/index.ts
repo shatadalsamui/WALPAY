@@ -73,7 +73,7 @@ app.post("/hdfcWebhook", verifyWebhook, async (req, res) => {
         res.json({
             message: "Captured"
         });
-    } catch (error) {
+    } catch (error) {//error handling 
         console.error("Deposit webhook error:", error);
         res.status(500).json({
             message: "Error while processing deposit webhook",
@@ -144,7 +144,7 @@ app.post("/hdfcWithdrawalWebhook", verifyWebhook, async (req, res) => {
         });
 
         res.json({ success: true });
-    } catch (error) {
+    } catch (error) {//error handling
         console.error("Withdrawal webhook error:", error);
         res.status(500).json({
             success: false,

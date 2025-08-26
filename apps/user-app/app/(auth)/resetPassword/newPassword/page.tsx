@@ -8,6 +8,7 @@ import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
 import { z } from "zod";
 
+//input validation schema of password
 const passwordSchema = z.string()
     .min(8, { message: "Password must be at least 8 characters" })
     .max(20, { message: "Password must be at most 20 characters" })
@@ -30,13 +31,14 @@ export default function NewPasswordPage() {
 
         // Zod validation for password
         const result = passwordSchema.safeParse(password);
+
+        //error handling
         if (!result.success) {
             const firstIssue = result.error.issues && result.error.issues[0];
             setError(firstIssue ? firstIssue.message : "Invalid password");
             setLoading(false);
             return;
         }
-
         if (password !== confirmPassword) {
             setError("Passwords do not match.");
             setLoading(false);
@@ -45,7 +47,8 @@ export default function NewPasswordPage() {
 
         // Get email from localStorage
         const email = localStorage.getItem("resetEmail") || "";
-
+        
+        //sends an api call to reset the password
         try {
             const response = await fetch("/api/resetPassword", {
                 method: "POST",

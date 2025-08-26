@@ -7,6 +7,7 @@ import { useState } from "react";
 import { createOnRampTransaction } from "../app/lib/actions/createOnrampTransaction";
 import { z } from "zod";
 
+//input validation schema 
 const addMoneySchema = z.object({
     amount: z.number()
         .min(500, "Minimum Deposit amount is ₹500 !")
@@ -15,6 +16,7 @@ const addMoneySchema = z.object({
     provider: z.string().min(1, "Please select a bank")
 });
 
+//list of banks 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
     redirectUrl: "https://netbanking.hdfcbank.com"
@@ -36,6 +38,7 @@ export const AddMoney = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
 
+    //function for handling addmoney to wallet 
     const handleAddMoney = async () => {
         try {
             const validationResult = addMoneySchema.safeParse({ amount, provider });

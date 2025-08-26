@@ -7,6 +7,7 @@ import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
 import { z } from "zod";
 
+//input validation schema for email 
 const emailSchema = z.string().email({ message: "Please enter a valid email address." });
 
 export default function VerifyEmailPage() {
@@ -21,15 +22,16 @@ export default function VerifyEmailPage() {
         setError("");
         setSuccess("");
 
-        // Zod validation
+        // zod validation for email
         const result = emailSchema.safeParse(email);
+
+        //error handling
         if (!result.success) {
             const firstIssue = result.error.issues && result.error.issues[0];
             setError(firstIssue ? firstIssue.message : "Invalid email");
             setLoading(false);
             return;
         }
-
         try {
             const response = await fetch("/api/resetPassword", {
                 method: "POST",

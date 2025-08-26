@@ -1,12 +1,12 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
-
 import { z } from "zod";
+
+//input validation schema for otp
 const otpSchema = z.string().length(6, "OTP must be exactly 6 digits !");
 
 export default function VerifyOtpPage() {
@@ -33,6 +33,7 @@ export default function VerifyOtpPage() {
         // Get email from localStorage
         const email = localStorage.getItem("resetEmail") || "";
 
+        //send an api request to verify otp 
         try {
             const response = await fetch("/api/resetPassword", {
                 method: "POST",

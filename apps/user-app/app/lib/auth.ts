@@ -37,7 +37,7 @@ const otpVerificationSchema = signupSchema.extend({
 
 // --- NEXTAUTH CONFIGURATION ---
 export const authOptions = {
-    pages: {
+    pages: {//custom pages for signup signin
         signIn: '/signin',
         signUp: '/signup',
         error: '/error',

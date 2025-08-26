@@ -21,6 +21,7 @@ const passwordSchema = z.object({
     password: z.string().min(8, { message: "Password must be at least 8 characters long!" }),
 });
 
+//function for sending otp using node mailer 
 async function sendOtp(email: string, otp: string) {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.error("Email credentials are not set in environment variables.");

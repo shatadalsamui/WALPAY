@@ -1,5 +1,4 @@
 "use client"
-
 import { ErrorPage } from "@repo/ui/errorpage";
 
 export default function AuthError() {

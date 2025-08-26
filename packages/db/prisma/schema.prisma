@@ -7,11 +7,13 @@ generator client {
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
+// Database connection configuration (PostgreSQL)
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// User table: stores all user info and relations
 model User {
   id                Int                 @id @default(autoincrement())
   email             String?             @unique
@@ -25,7 +27,7 @@ model User {
   withdrawals       Withdrawal[]
 }
 
-
+// P2P transfer table: records all peer-to-peer transfers
 model p2pTransfer {
   id         Int      @id @default(autoincrement())
   amount     Int
@@ -36,6 +38,7 @@ model p2pTransfer {
   toUser     User     @relation(name: "ToUserRelation", fields: [toUserId], references: [id])
 }
 
+// OnRampTransaction: records deposits (adding money to wallet)
 model OnRampTransaction {
   id        Int          @id @default(autoincrement())
   status    OnRampStatus
@@ -48,6 +51,7 @@ model OnRampTransaction {
   user      User         @relation(fields: [userId], references: [id])
 }
 
+// Withdrawal: records money withdrawn from wallet
 model Withdrawal {
   id              Int      @id @default(autoincrement())
   userId          Int
@@ -67,6 +71,7 @@ model Withdrawal {
   @@index([bankReferenceId])
 }
 
+// Balance: tracks each user's wallet balance and locked funds
 model Balance {
   id     Int  @id @default(autoincrement())
   userId Int  @unique
@@ -80,12 +85,14 @@ enum AuthType {
   Github
 }
 
+// Enum for onramp transaction status
 enum OnRampStatus {
   Success
   Failure
   Processing
 }
 
+// Otp: stores OTPs for signup/verification
 model Otp {
   id        Int      @id @default(autoincrement())
   email     String   @unique
@@ -97,6 +104,7 @@ model Otp {
   expiresAt DateTime
 }
 
+// PasswordResetOtp: stores OTPs for password reset
 model PasswordResetOtp {
   id          Int      @id @default(autoincrement())
   email       String   @unique

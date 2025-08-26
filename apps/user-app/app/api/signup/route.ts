@@ -25,7 +25,6 @@ const signupSchema = z.object({
 
 
 // Sends an OTP to the user's email address.
-
 async function sendOtp(email: string, otp: string) {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.error("Email credentials are not set in environment variables.");
@@ -62,7 +61,7 @@ export async function POST(req: NextRequest) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-        const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        const newOtp = Math.floor(100000 + Math.random() * 900000).toString();//generate random otp
         const hashedOtp = await bcrypt.hash(newOtp, 10); // Hash the OTP
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
 

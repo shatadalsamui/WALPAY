@@ -1,3 +1,4 @@
+// user's balance card
 import { Card } from "@repo/ui/card";
 
 export const BalanceCard = ({ amount, locked }: {

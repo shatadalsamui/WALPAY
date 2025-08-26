@@ -6,6 +6,7 @@ import { Form } from "../../../components/OtpForm";
 import { Center } from "@repo/ui/center";
 import { z } from "zod";
 
+//input validation schema for otp
 const otpSchema = z.string()
     .length(6, { message: "OTP must be exactly 6 digits." })
     .regex(/^\d+$/, { message: "OTP must contain only numbers and no spaces." });
@@ -18,6 +19,7 @@ function OTPSignInPage() {
 
     const [signupData, setSignupData] = useState<{ name: string; phone: string; email: string; password: string } | null>(null);
 
+    //retrieves user's signup data from session storage of the browser
     useEffect(() => {
         const storedData = sessionStorage.getItem('signupData');
         if (storedData) {
@@ -31,15 +33,15 @@ function OTPSignInPage() {
         setLoading(true);
         setError("");
 
-        const validationResult = otpSchema.safeParse(otp);
+        const validationResult = otpSchema.safeParse(otp);//validates the otp using the schema 
+
+        //error handling
         if (!validationResult.success) {
             const firstError = validationResult.error.issues?.[0]?.message || "Invalid OTP format.";
             setError(firstError);
             setLoading(false);
             return;
         }
-
-
         if (!signupData) {
             setError("Missing user data. Please try signing up again.");
             setLoading(false);
