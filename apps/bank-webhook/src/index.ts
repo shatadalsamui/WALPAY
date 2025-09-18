@@ -47,15 +47,26 @@ app.post("/hdfcWebhook", verifyWebhook, async (req, res) => {
             return res.status(200).json({ message: "Already processed" });
         }
 
+
+        // 2.1. Check that the user_identifier matches the transaction's userId
+        if (txn.userId !== Number(paymentInformation.user_identifier)) {
+            return res.status(400).json({ message: "User identifier does not match transaction owner" });
+        }
+
+        // 2.2. Check that the amount matches the transaction's amount
+        if (txn.amount !== Number(paymentInformation.amount)) {
+            return res.status(400).json({ message: "Amount does not match transaction" });
+        }
+
         // 3. Process the transaction
-        await db.$transaction([//Both updates run in a single atomic transaction—if either fails or the server crashes, neither change is saved.it gets rolled back!
+        await db.$transaction([
             db.balance.updateMany({
                 where: {
-                    userId: Number(paymentInformation.user_identifier)
+                    userId: txn.userId
                 },
                 data: {
                     amount: {
-                        increment: Number(paymentInformation.amount)
+                        increment: txn.amount
                     }
                 }
             }),
