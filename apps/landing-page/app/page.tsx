@@ -9,8 +9,8 @@ export default function LandingPage() {
           <div className="text-4xl text-blue-800 font-bold italic">WALPAY</div>
         </div>
         <div className="flex gap-4">
-          <Link href="http://localhost:3001/signup" className="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Sign Up</Link>
-          <Link href="http://localhost:3001/signin" className="px-5 py-2 rounded-lg border border-blue-600 text-blue-700 font-semibold hover:bg-blue-50 transition">Sign In</Link>
+          <Link href={`${process.env.NEXT_PUBLIC_USER_APP_URL}/signup`} className="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Sign Up</Link>
+          <Link href={`${process.env.NEXT_PUBLIC_USER_APP_URL}/signin`} className="px-5 py-2 rounded-lg border border-blue-600 text-blue-700 font-semibold hover:bg-blue-50 transition">Sign In</Link>
         </div>
       </header>
 
@@ -27,7 +27,7 @@ export default function LandingPage() {
               <span className="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-medium shadow-sm animate-bounce animate-delay-700">WalPay your friends</span>
             </div>
             <Link
-              href="http://localhost:3001/signup"
+              href={`${process.env.NEXT_PUBLIC_USER_APP_URL}/signup`}
               className="px-8 py-3 rounded-lg bg-gray-800 text-white font-bold text-lg shadow-lg hover:bg-gray-900 transition animate-fade-in-up animate-delay-800"
             >
               Get Started
