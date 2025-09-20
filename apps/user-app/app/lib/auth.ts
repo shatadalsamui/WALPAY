@@ -42,6 +42,9 @@ export const authOptions = {
         signUp: '/signup',
         error: '/error',
     },
+    session: {
+        strategy: "jwt" as const,
+    },
     providers: [
         CredentialsProvider({
             name: 'Credentials',
