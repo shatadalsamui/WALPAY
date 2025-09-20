@@ -3,10 +3,12 @@ import { Card } from "@repo/ui/card";
 import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { p2pTransfer } from "../app/lib/actions/p2pTransfer";
 import { z } from "zod";
 
 export function SendCard() {
+    const router = useRouter();
     const [number, setNumber] = useState("");
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
@@ -48,6 +50,9 @@ export function SendCard() {
             setMessage({ text: "Transfer successful!", type: 'success' });
             setNumber("");
             setAmount("");
+            
+            // Refresh the page data to show updated transactions and balance
+            router.refresh();
         } catch (e) {
             setMessage({
                 text: e instanceof Error ? e.message : "Transfer failed",

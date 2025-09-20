@@ -4,6 +4,7 @@ import { TextInput } from "@repo/ui/textinput";
 import { Button } from "@repo/ui/button";
 import { Select } from "@repo/ui/select";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createOnRampTransaction } from "../app/lib/actions/createOnrampTransaction";
 import { z } from "zod";
 
@@ -32,6 +33,7 @@ const SUPPORTED_BANKS = [{
 }];
 
 export const AddMoney = () => {
+    const router = useRouter();
     const [redirectUrl, setRedirectUrl] = useState(SUPPORTED_BANKS[0]?.redirectUrl);
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [amount, setAmount] = useState(0);
@@ -52,6 +54,10 @@ export const AddMoney = () => {
             setIsLoading(true);
             setMessage(null);
             await createOnRampTransaction(amount, provider);
+            
+            // Refresh the page data to show updated transactions and balance
+            router.refresh();
+            
             window.location.href = redirectUrl || "";
         } catch (error: any) {
             setMessage({ text: error?.message || "An error occurred", type: 'error' });

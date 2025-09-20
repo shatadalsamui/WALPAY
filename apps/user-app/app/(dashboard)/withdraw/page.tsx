@@ -26,7 +26,8 @@ async function getWithdrawTransactions() {
     },
     orderBy: {
       createdAt: "desc"
-    }
+    },
+    take: 10 // Limit to last 10 transactions
   });
   console.log("Withdrawal statuses:", txns.map(t => t.status));
   return txns.map(t => ({

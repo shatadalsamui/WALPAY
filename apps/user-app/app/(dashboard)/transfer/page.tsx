@@ -26,7 +26,8 @@ async function getOnRampTransactions() {
         },
         orderBy: {
             startTime: "desc"
-        }
+        },
+        take: 10 // Limit to last 10 transactions
     });
     return txns.map(t => ({
         time: t.startTime,

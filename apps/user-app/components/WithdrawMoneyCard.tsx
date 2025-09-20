@@ -3,6 +3,7 @@ import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
 import { Select } from "@repo/ui/select";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TextInput } from "@repo/ui/textinput";
 import { createWithdrawal } from "../app/lib/actions/createWithdrawal";
 import { z } from "zod";
@@ -35,6 +36,7 @@ const SUPPORTED_BANKS = [{
 }];
 
 export const WithdrawMoney = () => {
+    const router = useRouter();
     const [bank, setBank] = useState(SUPPORTED_BANKS[0]?.code || "");
     const [accountNumber, setAccountNumber] = useState("");
     const [amount, setAmount] = useState(0);
@@ -72,6 +74,9 @@ export const WithdrawMoney = () => {
                 setMessage({ text: "Withdrawal request submitted successfully", type: 'success' });
                 setAmount(0);
                 setAccountNumber("");
+                
+                // Refresh the page data to show updated transactions and balance
+                router.refresh();
             } else {
                 setMessage({ text: response.message || "Failed to process withdrawal", type: 'error' });
             }
