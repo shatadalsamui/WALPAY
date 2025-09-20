@@ -1,10 +1,10 @@
-  {
+{
   "name": "bank-webhook",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx prisma generate --schema=../../packages/db/prisma/schema.prisma && npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js && cp -r ../../packages/db/node_modules/.prisma/client dist/",
+    "build": "npx prisma generate --schema=../../packages/db/prisma/schema.prisma && npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js && cp -r ../../node_modules/.prisma/client dist/",
     "start": "dotenv -e ../../packages/db/.env -- node dist/index.js",
     "dev": "npm run build && npm run start"
   },
