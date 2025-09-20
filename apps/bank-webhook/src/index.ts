@@ -98,13 +98,13 @@ app.post("/hdfcWithdrawalWebhook", verifyWebhook, async (req, res) => {
     const withdrawalInfo = req.body as WithdrawalWebhookRequest;
 
     try {// all txns are atomic,if any of them fails, all changes are rolled back.
-        await db.$transaction(async (tx) => {
+        await db.$transaction(async (tx: any) => {
             // Find withdrawal by token with all required fields
             const withdrawal = await tx.withdrawal.findFirst({
                 where: { token: withdrawalInfo.token },
-                select: { 
-                    id: true, 
-                    userId: true, 
+                select: {
+                    id: true,
+                    userId: true,
                     amount: true,
                     status: true
                 }
